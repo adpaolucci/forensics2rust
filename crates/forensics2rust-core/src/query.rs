@@ -1,8 +1,8 @@
-use guap_table::{GetNirQuery, Row, TableData, TableProvider, TableQuery, TableSchema};
+use guap_table::{GuapQuery, Row, TableData, TableProvider, TableQuery, TableSchema};
 
 use crate::error::ForensicError;
 
-/// Thin adapter delegating filtering, sorting, projection, pagination, and `GetNir`
+/// Thin adapter delegating filtering, sorting, projection, pagination, and `GuapQuery`
 /// query execution to `guap_table`.
 pub struct QueryHelper;
 
@@ -12,8 +12,8 @@ impl QueryHelper {
         guap_table::apply_query(schema, rows, req).map_err(ForensicError::from)
     }
 
-    /// Parses `GetNir` filter and sort strings plus projection and pagination into a `TableQuery`.
-    pub fn build_getnir_query(
+    /// Parses `GuapQuery` filter and sort strings plus projection and pagination into a `TableQuery`.
+    pub fn build_query(
         schema: &TableSchema,
         columns: Option<Vec<String>>,
         filter_expr: Option<&str>,
@@ -22,21 +22,21 @@ impl QueryHelper {
         limit: Option<usize>,
     ) -> Result<TableQuery, ForensicError> {
         let sort = match sort_spec {
-            Some(s) if !s.trim().is_empty() => GetNirQuery::parse_sort(s)?,
+            Some(s) if !s.trim().is_empty() => GuapQuery::parse_sort(s)?,
             _ => Vec::new(),
         };
-        let nir = GetNirQuery {
+        let guap_query = GuapQuery {
             columns,
             filter_expr: filter_expr.map(str::to_string),
             sort,
             offset,
             limit,
         };
-        nir.to_table_query(schema).map_err(ForensicError::from)
+        guap_query.to_table_query(schema).map_err(ForensicError::from)
     }
 
-    /// One-shot `GetNir` query over in-memory rows via `guap_table::apply_query`.
-    pub fn apply_getnir(
+    /// One-shot `GuapQuery` query over in-memory rows via `guap_table::apply_query`.
+    pub fn apply_query(
         schema: &TableSchema,
         rows: &[Row],
         columns: Option<Vec<String>>,
@@ -45,11 +45,11 @@ impl QueryHelper {
         offset: usize,
         limit: Option<usize>,
     ) -> Result<TableData, ForensicError> {
-        let query = Self::build_getnir_query(schema, columns, filter_expr, sort_spec, offset, limit)?;
+        let query = Self::build_query(schema, columns, filter_expr, sort_spec, offset, limit)?;
         Self::apply(schema, rows, &query)
     }
 
-    /// Executes a `GetNir` query against any `guap_table::TableProvider`.
+    /// Executes a `GuapQuery` against any `guap_table::TableProvider`.
     pub fn query_provider(
         provider: &dyn TableProvider,
         columns: Option<Vec<String>>,
@@ -59,7 +59,7 @@ impl QueryHelper {
         limit: Option<usize>,
     ) -> Result<TableData, ForensicError> {
         let schema = provider.schema();
-        let query = Self::build_getnir_query(&schema, columns, filter_expr, sort_spec, offset, limit)?;
+        let query = Self::build_query(&schema, columns, filter_expr, sort_spec, offset, limit)?;
         provider.query(&query).map_err(ForensicError::from)
     }
 

@@ -73,7 +73,7 @@ fn parses_synthetic_srudb_multipage_ese_and_id_map() {
 }
 
 #[test]
-fn all_4_providers_support_getnir_queries_and_detail_payloads() {
+fn all_4_providers_support_guap_query_and_detail_payloads() {
     let src = ForensicSource::OfflineBytes(build_synthetic_srudb_bytes());
 
     // 1. srum.db (default + for_table)
@@ -86,7 +86,7 @@ fn all_4_providers_support_getnir_queries_and_detail_payloads() {
         0,
         Some(10),
     )
-    .expect("srum.db GetNir");
+    .expect("srum.db GuapQuery");
     assert_eq!(db_res.total_rows, 6);
     assert!(db_res.rows[0].detail_json.is_some());
     assert!(db_res.rows[0].raw_bytes.is_some());
@@ -127,7 +127,7 @@ fn all_4_providers_support_getnir_queries_and_detail_payloads() {
         0,
         Some(1),
     )
-    .expect("srum.net GetNir");
+    .expect("srum.net GuapQuery");
     assert_eq!(net_filtered.total_rows, 1);
     assert_eq!(net_filtered.rows[0].cells[1], CellValue::Bytes(1_048_576));
 
@@ -141,7 +141,7 @@ fn all_4_providers_support_getnir_queries_and_detail_payloads() {
         0,
         Some(10),
     )
-    .expect("srum.app GetNir");
+    .expect("srum.app GuapQuery");
     assert_eq!(app_res.total_rows, 1);
     assert_eq!(app_res.rows[0].cells[3], CellValue::Uint(750_000));
     assert_eq!(app_res.rows[0].cells[7], CellValue::Bytes(2560));
@@ -150,7 +150,7 @@ fn all_4_providers_support_getnir_queries_and_detail_payloads() {
     // 4. srum.energy (both FEE4E14F and DD6636C4)
     let energy_prov = SrumEnergyProvider::new(src);
     let energy_all = QueryHelper::query_provider(&energy_prov, None, None, Some("Timestamp:desc"), 0, Some(10))
-        .expect("srum.energy GetNir");
+        .expect("srum.energy GuapQuery");
     assert_eq!(energy_all.total_rows, 2);
     assert!(energy_all.rows.iter().any(|r| r.cells[3] == CellValue::Uint(9000)));
     assert!(energy_all.rows.iter().any(|r| r.cells[7] == CellValue::Uint(3600)));

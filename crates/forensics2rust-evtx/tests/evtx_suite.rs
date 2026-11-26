@@ -1468,7 +1468,7 @@ fn query_helper_filtering_sorting_projection_pagination() {
         1,
         Some(1),
     )
-    .expect("GetNir query should succeed");
+    .expect("GuapQuery should succeed");
 
     assert_eq!(data.total_rows, 2);
     assert_eq!(data.rows.len(), 1);

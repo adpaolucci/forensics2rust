@@ -158,7 +158,7 @@ fn prefetch_scca_versions_v17_v23_v26_v30_and_provider() {
         assert_eq!(parsed.process_path, "\\VOLUME{1}\\WINDOWS\\SYSTEM32\\CMD.EXE");
     }
 
-    // Compressed v30 via WinPrefetchProvider + GetNir projection/filtering
+    // Compressed v30 via WinPrefetchProvider + GuapQuery projection/filtering
     let scca = build_synthetic_scca(&SyntheticSccaSpec {
         version: 30,
         exe_name: "NOTEPAD.EXE",
@@ -474,7 +474,7 @@ fn shimcache_win10_win8_win7_and_usb_parsers_and_providers() {
     assert_eq!(p7_32.len(), 1);
     assert_eq!(p7_32[0].path, "C:\\Tools\\win7x86.exe");
 
-    // USBDeview offline SYSTEM hive
+    // Offline USB devices SYSTEM hive
     let sys = build_system_hive(when);
     let usb_dev = UsbDevicesProvider::new(ForensicSource::OfflineBytes(sys));
     let dev_table = usb_dev.query(&TableQuery::default()).unwrap();
@@ -489,7 +489,7 @@ fn shimcache_win10_win8_win7_and_usb_parsers_and_providers() {
                 && r.cells[3] == CellValue::Null)
     );
 
-    // USBLogView UTF-8 and UTF-16LE BOM
+    // USB Log UTF-8 and UTF-16LE BOM
     let log_str = build_setupapi_dev_log();
     let mut utf16_log = vec![0xFFu8, 0xFEu8];
     for u in log_str.encode_utf16() {
@@ -625,8 +625,8 @@ fn aggregators_executed_programs_and_last_activity_offline_directory() {
             .any(|r| r.cells[5] == CellValue::Text("Registry:RunMRU".to_string()))
     );
 
-    // GetNir filter test on LastActivityView
-    let filtered = QueryHelper::apply_getnir(
+    // GuapQuery filter test on Cross-Artifact Activity Timeline
+    let filtered = QueryHelper::apply_query(
         &act_table.schema,
         &act_table.rows,
         None,
@@ -722,25 +722,25 @@ fn live_non_elevated_smoke_tests_and_graceful_degradation() {
     };
 
     let profiles = UserProfilesProvider::new(ForensicSource::Live).query(&q);
-    assert!(profiles.is_ok(), "UserProfilesView live failed: {profiles:?}");
+    assert!(profiles.is_ok(), "User Profiles live failed: {profiles:?}");
 
     let usb_dev = UsbDevicesProvider::new(ForensicSource::Live).query(&q);
-    assert!(usb_dev.is_ok(), "USBDeview live failed: {usb_dev:?}");
+    assert!(usb_dev.is_ok(), "USB Devices live failed: {usb_dev:?}");
 
     let usb_log = UsbLogProvider::new(ForensicSource::Live).query(&q);
-    assert!(usb_log.is_ok(), "USBLogView live failed: {usb_log:?}");
+    assert!(usb_log.is_ok(), "USB Log live failed: {usb_log:?}");
 
     let recent = RecentFilesProvider::new(ForensicSource::Live).query(&q);
-    assert!(recent.is_ok(), "RecentFilesView live failed: {recent:?}");
+    assert!(recent.is_ok(), "Recent Files live failed: {recent:?}");
 
     let jumplists = JumpListsProvider::new(ForensicSource::Live).query(&q);
-    assert!(jumplists.is_ok(), "JumpListsView live failed: {jumplists:?}");
+    assert!(jumplists.is_ok(), "Windows Jump Lists live failed: {jumplists:?}");
 
     let pnp = UsbLogProvider::watch_pnp_events(std::time::Duration::from_millis(50));
     assert!(pnp.is_ok(), "watch_pnp_events failed: {pnp:?}");
 
     let executed = ExecutedProgramsProvider::new(ForensicSource::Live).query_with_warnings(&q);
-    assert!(executed.is_ok(), "ExecutedProgramsList live failed: {executed:?}");
+    assert!(executed.is_ok(), "Executed Programs live failed: {executed:?}");
 
     let pf_res = WinPrefetchProvider::new(ForensicSource::Live).query(&q);
     assert!(pf_res.is_ok() || matches!(pf_res, Err(TableError::Provider(_))));

@@ -563,7 +563,7 @@ fn mdmp_kernel_bsod_fixture_parses_stream_ids_registers_stack_and_driver() {
     assert_eq!(dump.unloaded_modules[0].module_name, "unloaded_drv.sys");
     assert_eq!(dump.misc_info.as_ref().and_then(|m| m.process_id), Some(4));
 
-    // Verify CrashBsodProvider output & GetNir compatibility
+    // Verify CrashBsodProvider output & GuapQuery compatibility
     let provider = CrashBsodProvider::new(ForensicSource::OfflineBytes(bytes));
     assert!(provider.is_read_only());
     let data = provider.query(&TableQuery::default()).unwrap();
@@ -579,7 +579,7 @@ fn mdmp_kernel_bsod_fixture_parses_stream_ids_registers_stack_and_driver() {
     assert!(row.detail_json.is_some());
     assert_eq!(row.raw_bytes.as_ref().unwrap().len(), 2168);
 
-    // GetNir filter on hex column
+    // GuapQuery filter on hex column
     let filtered = QueryHelper::query_provider(
         &provider,
         None,

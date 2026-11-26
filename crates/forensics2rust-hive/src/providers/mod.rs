@@ -6,10 +6,10 @@ pub mod scan;
 pub mod watch;
 
 pub use diff::{RegistryChangesProvider, RegistrySnapshotEntry};
-pub use export::RegFileExportProvider;
+pub use export::RegistryFileExportProvider;
 pub use find::{FindCriteria, OfflineFinderProvider};
 pub use offline::OfflineRegistryProvider;
-pub use scan::{RegScannerProvider, ScanOptions};
+pub use scan::{RegistryScannerProvider, ScanOptions};
 pub use watch::RegWatchProvider;
 
 use chrono::{DateTime, Utc};

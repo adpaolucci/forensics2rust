@@ -58,7 +58,7 @@ fn join_module_names(dump: &MinidumpFile, max_items: usize) -> CellValue {
     }
 }
 
-/// `BlueScreenView` (`crash.bsod`) — pure-Rust kernel/BSOD `MDMP` minidump analyzer.
+/// `crash.bsod` — pure-Rust kernel/BSOD `MDMP` minidump analyzer.
 #[derive(Debug, Clone)]
 pub struct CrashBsodProvider {
     source: ForensicSource,
@@ -248,7 +248,7 @@ impl TableProvider for CrashBsodProvider {
     fn schema(&self) -> TableSchema {
         TableSchema::new(
             self.tool_id(),
-            "BlueScreenView — BSOD Minidumps",
+            "BSOD Minidumps",
             vec![
                 ColumnDef::new("dump_file", "Dump File", ColumnType::Text).with_width_hint(190),
                 ColumnDef::new("crash_time", "Crash Time", ColumnType::Timestamp).with_width_hint(175),
@@ -285,7 +285,7 @@ impl TableProvider for CrashBsodProvider {
     }
 }
 
-/// `AppCrashView` (`crash.wer`) — UTF-16LE / UTF-8 `Report.wer` Windows Error Reporting parser.
+/// `crash.wer` — UTF-16LE / UTF-8 `Report.wer` Windows Error Reporting parser.
 #[derive(Debug, Clone)]
 pub struct CrashWerProvider {
     source: ForensicSource,
@@ -372,7 +372,7 @@ impl TableProvider for CrashWerProvider {
     fn schema(&self) -> TableSchema {
         TableSchema::new(
             self.tool_id(),
-            "AppCrashView — Windows Error Reporting",
+            "Windows Error Reporting",
             vec![
                 ColumnDef::new("event_time", "Crash Time", ColumnType::Timestamp).with_width_hint(175),
                 ColumnDef::new("event_type", "Event Type", ColumnType::Text).with_width_hint(130),
@@ -406,7 +406,7 @@ impl TableProvider for CrashWerProvider {
     }
 }
 
-/// `WinCrashReport` (`crash.report`) — user-mode `MDMP` analyzer with offline PE export lookup.
+/// `crash.report` — user-mode `MDMP` analyzer with offline PE export lookup.
 #[derive(Debug, Clone)]
 pub struct CrashReportProvider {
     source: ForensicSource,
@@ -604,7 +604,7 @@ impl TableProvider for CrashReportProvider {
     fn schema(&self) -> TableSchema {
         TableSchema::new(
             self.tool_id(),
-            "WinCrashReport — User-Mode Crash Reports",
+            "User-Mode Crash Reports",
             vec![
                 ColumnDef::new("process_name", "Process Name", ColumnType::Text).with_width_hint(150),
                 ColumnDef::new("crash_time", "Crash Time", ColumnType::Timestamp).with_width_hint(175),

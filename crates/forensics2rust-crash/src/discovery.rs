@@ -49,7 +49,7 @@ fn env_path_or(var: &str, fallback: &str) -> PathBuf {
         .unwrap_or_else(|| PathBuf::from(fallback))
 }
 
-/// Default live Windows locations for `crash.bsod` (`BlueScreenView`).
+/// Default live Windows locations for `crash.bsod` (BSOD Minidumps).
 pub fn live_bsod_roots() -> Vec<LiveRootSpec> {
     let sys_root = env_path_or("SystemRoot", r"C:\Windows");
     vec![
@@ -59,7 +59,7 @@ pub fn live_bsod_roots() -> Vec<LiveRootSpec> {
     ]
 }
 
-/// Default live Windows locations for `crash.wer` (`AppCrashView`).
+/// Default live Windows locations for `crash.wer` (Windows Error Reporting).
 pub fn live_wer_roots() -> Vec<LiveRootSpec> {
     let program_data = env_path_or("ProgramData", r"C:\ProgramData");
     let mut roots = vec![
@@ -74,7 +74,7 @@ pub fn live_wer_roots() -> Vec<LiveRootSpec> {
     roots
 }
 
-/// Default live Windows locations for `crash.report` (`WinCrashReport`).
+/// Default live Windows locations for `crash.report` (User-Mode Crash Reports).
 pub fn live_report_roots() -> Vec<LiveRootSpec> {
     let program_data = env_path_or("ProgramData", r"C:\ProgramData");
     let mut roots = Vec::new();

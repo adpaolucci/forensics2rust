@@ -1,7 +1,7 @@
 #![forbid(unsafe_code)]
 
-//! Cross-artifact correlators for `ExecutedProgramsList` (`artifacts.executed`)
-//! and `LastActivityView` (`artifacts.activity`), combining Prefetch, Registry,
+//! Cross-artifact correlators for Executed Programs (`artifacts.executed`)
+//! and Cross-Artifact Activity Timeline (`artifacts.activity`), combining Prefetch, Registry,
 //! ShimCache, Amcache, EVTX, Recent `.lnk`, and JumpLists with graceful partial
 //! degradation (`DiagnosticWarning`).
 
@@ -33,7 +33,7 @@ use crate::parsers::registry_artifacts::{
 use crate::parsers::shimcache::parse_shimcache;
 
 // ---------------------------------------------------------------------------
-// 1. ExecutedProgramsList Correlator
+// 1. Executed Programs Correlator
 // ---------------------------------------------------------------------------
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -321,7 +321,7 @@ pub fn collect_executed_programs(
                 return Ok((json_recs, warnings));
             } else {
                 return Err(ForensicError::parse(
-                    "ExecutedProgramsList",
+                    "artifacts.executed",
                     "unrecognized offline artifact buffer",
                 ));
             }
@@ -424,7 +424,7 @@ pub fn collect_executed_programs(
             #[cfg(not(windows))]
             return Err(ForensicError::unsupported_platform(
                 "artifacts.executed",
-                "live ExecutedProgramsList requires Windows",
+                "live artifacts.executed requires Windows",
             ));
 
             #[cfg(windows)]
@@ -597,7 +597,7 @@ pub fn collect_executed_programs(
 }
 
 // ---------------------------------------------------------------------------
-// 2. LastActivityView Correlator
+// 2. Cross-Artifact Activity Timeline Correlator
 // ---------------------------------------------------------------------------
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -875,7 +875,7 @@ fn ingest_file_bytes_for_activity(
     }
 
     Err(ForensicError::parse(
-        "LastActivityView",
+        "artifacts.activity",
         format!("unrecognized artifact file: {label}"),
     ))
 }
@@ -951,7 +951,7 @@ pub fn collect_last_activity(
             #[cfg(not(windows))]
             return Err(ForensicError::unsupported_platform(
                 "artifacts.activity",
-                "live LastActivityView requires Windows",
+                "live artifacts.activity requires Windows",
             ));
 
             #[cfg(windows)]

@@ -88,7 +88,7 @@ fn map_jet_col_type(coltyp: JetColType) -> ColumnType {
 fn default_srum_db_schema() -> TableSchema {
     TableSchema::new(
         "srum.db",
-        "ESEDatabaseView — ESE Database Catalog & Table Browser",
+        "ESE Database Catalog & Table Browser",
         vec![
             ColumnDef::new("table_name", "TableName", ColumnType::Text).with_width_hint(220),
             ColumnDef::new("record_index", "RecordIndex", ColumnType::Uint).with_width_hint(90),
@@ -110,10 +110,10 @@ fn dynamic_table_schema(ese_schema: &EseTableSchema) -> TableSchema {
             ColumnDef::new(sanitize_col_id(&col.name), &col.name, map_jet_col_type(col.col_type)).with_width_hint(160),
         );
     }
-    TableSchema::new("srum.db", format!("ESEDatabaseView — {}", ese_schema.name), cols)
+    TableSchema::new("srum.db", format!("ESE Table — {}", ese_schema.name), cols)
 }
 
-/// `srum.db` (`ESEDatabaseView`) — Pure-Rust ESE (`0x89ABCDEF`) `MSysObjects` catalog and generic table browser.
+/// `srum.db` — Pure-Rust ESE (`0x89ABCDEF`) `MSysObjects` catalog and generic table browser.
 #[derive(Debug, Clone)]
 pub struct SrumDbProvider {
     source: ForensicSource,
@@ -266,7 +266,7 @@ impl TableProvider for SrumDbProvider {
     }
 }
 
-/// `srum.net` (`NetworkUsageView`) — SRUM `{973F5D5C-...}` + `SruDbIdMapTable` network usage view.
+/// `srum.net` — SRUM `{973F5D5C-...}` + `SruDbIdMapTable` network usage view.
 #[derive(Debug, Clone)]
 pub struct SrumNetProvider {
     source: ForensicSource,
@@ -293,7 +293,7 @@ impl TableProvider for SrumNetProvider {
     fn schema(&self) -> TableSchema {
         TableSchema::new(
             "srum.net",
-            "NetworkUsageView — SRUM Network Data Usage Monitor",
+            "SRUM Network Data Usage Monitor",
             vec![
                 ColumnDef::new("timestamp", "Timestamp", ColumnType::Timestamp).with_width_hint(180),
                 ColumnDef::new("app_id", "AppId", ColumnType::Text).with_width_hint(280),

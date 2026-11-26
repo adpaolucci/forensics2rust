@@ -1,10 +1,10 @@
 #![forbid(unsafe_code)]
 
 //! Providers 10, 11, 12, and 13 (USB & VSS artifacts):
-//! - `USBDeview` (`artifacts.usb_devices`)
-//! - `USBLogView` (`artifacts.usb_log`)
-//! - `ShadowCopyView` (`artifacts.vss`)
-//! - `PreviousFilesRecovery` (`artifacts.previous`)
+//! - USB Devices View (`artifacts.usb_devices`)
+//! - USB Log View (`artifacts.usb_log`)
+//! - Shadow Copy Catalog (`artifacts.vss`)
+//! - Previous File Versions (`artifacts.previous`)
 
 use std::collections::BTreeMap;
 use std::fs;
@@ -27,7 +27,7 @@ use crate::vss::{
 };
 
 // ---------------------------------------------------------------------------
-// 10. artifacts.usb_devices — USBDeview
+// 10. artifacts.usb_devices — USB Devices View
 // ---------------------------------------------------------------------------
 
 pub struct UsbDevicesProvider {
@@ -80,7 +80,7 @@ fn load_usb_devices(source: &ForensicSource) -> Result<(Vec<UsbDeviceRecord>, Ve
         #[cfg(not(windows))]
         return Err(ForensicError::unsupported_platform(
             "artifacts.usb_devices",
-            "live USBDeview requires Windows",
+            "live artifacts.usb_devices requires Windows",
         ));
 
         #[cfg(windows)]
@@ -187,7 +187,7 @@ impl TableProvider for UsbDevicesProvider {
 }
 
 // ---------------------------------------------------------------------------
-// 11. artifacts.usb_log — USBLogView
+// 11. artifacts.usb_log — USB Log View
 // ---------------------------------------------------------------------------
 
 pub struct UsbLogProvider {
@@ -272,7 +272,7 @@ fn load_usb_log_events(
             #[cfg(not(windows))]
             return Err(ForensicError::unsupported_platform(
                 "artifacts.usb_log",
-                "live USBLogView requires Windows",
+                "live artifacts.usb_log requires Windows",
             ));
 
             #[cfg(windows)]
@@ -373,7 +373,7 @@ impl TableProvider for UsbLogProvider {
 }
 
 // ---------------------------------------------------------------------------
-// 12. artifacts.vss — ShadowCopyView
+// 12. artifacts.vss — Shadow Copy Catalog
 // ---------------------------------------------------------------------------
 
 pub struct ShadowCopyProvider {
@@ -431,7 +431,7 @@ impl TableProvider for ShadowCopyProvider {
     fn schema(&self) -> TableSchema {
         TableSchema::new(
             self.tool_id(),
-            "ShadowCopyView",
+            "Shadow Copy Catalog",
             vec![
                 col("shadow_copy_name", "ShadowCopyName", ColumnType::Text, 180),
                 col("device_object", "DeviceObject", ColumnType::Text, 280),
@@ -456,7 +456,7 @@ impl TableProvider for ShadowCopyProvider {
 }
 
 // ---------------------------------------------------------------------------
-// 13. artifacts.previous — PreviousFilesRecovery
+// 13. artifacts.previous — Previous File Versions
 // ---------------------------------------------------------------------------
 
 pub struct PreviousFilesProvider {
@@ -534,7 +534,7 @@ impl TableProvider for PreviousFilesProvider {
     fn schema(&self) -> TableSchema {
         TableSchema::new(
             self.tool_id(),
-            "PreviousFilesRecovery",
+            "Previous File Versions",
             vec![
                 col("filename", "Filename", ColumnType::Text, 200),
                 col("folder", "Folder", ColumnType::Text, 280),

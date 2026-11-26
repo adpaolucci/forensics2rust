@@ -43,7 +43,7 @@ impl ToolCategory {
 pub struct ToolDescriptor {
     pub tool_id: &'static str,
     pub cli_subcommand: &'static str,
-    pub nirsoft_equivalent: Option<&'static str>,
+    pub display_name: &'static str,
     pub category: ToolCategory,
     pub description: &'static str,
     pub read_only: bool,
@@ -57,7 +57,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "evtx.all",
         cli_subcommand: "evtx all",
-        nirsoft_equivalent: Some("FullEventLogView"),
+        display_name: "All EVTX Events",
         category: ToolCategory::Evtx,
         description: "Full Windows Event Log viewer across .evtx files/directories and live channels",
         read_only: true,
@@ -67,7 +67,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "evtx.legacy",
         cli_subcommand: "evtx legacy",
-        nirsoft_equivalent: Some("MyEventViewer"),
+        display_name: "Legacy Event Logs",
         category: ToolCategory::Evtx,
         description: "Unified flat view across Application, System, and Security Event Logs",
         read_only: true,
@@ -77,7 +77,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "evtx.channels",
         cli_subcommand: "evtx channels",
-        nirsoft_equivalent: Some("EventLogChannelsView"),
+        display_name: "EVTX Channels",
         category: ToolCategory::Evtx,
         description: "EVTX channel configuration, file path, size, and enabled status viewer",
         read_only: true,
@@ -87,7 +87,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "evtx.sources",
         cli_subcommand: "evtx sources",
-        nirsoft_equivalent: Some("EventLogSourcesView"),
+        display_name: "EVTX Event Sources",
         category: ToolCategory::Evtx,
         description: "Event Log publisher and provider DLL metadata viewer",
         read_only: true,
@@ -97,7 +97,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "evtx.logon",
         cli_subcommand: "evtx logon",
-        nirsoft_equivalent: Some("WinLogOnView"),
+        display_name: "Windows Logon Sessions",
         category: ToolCategory::Evtx,
         description: "Security Event Log (4624/4634/4647/4625) logon session correlator",
         read_only: true,
@@ -107,7 +107,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "evtx.uptime",
         cli_subcommand: "evtx uptime",
-        nirsoft_equivalent: Some("TurnedOnTimesView"),
+        display_name: "System Uptime & Boot History",
         category: ToolCategory::Evtx,
         description: "System Event Log (6005/6006/6008/6009/1074/41/12/13) boot and shutdown analyzer",
         read_only: true,
@@ -117,7 +117,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "evtx.wifi",
         cli_subcommand: "evtx wifi",
-        nirsoft_equivalent: Some("WifiHistoryView"),
+        display_name: "Wi-Fi Connection History",
         category: ToolCategory::Evtx,
         description: "WLAN-AutoConfig Operational (8001..8003, 11000..11010) Wi-Fi connection history",
         read_only: true,
@@ -127,7 +127,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "evtx.defender",
         cli_subcommand: "evtx defender",
-        nirsoft_equivalent: Some("WinDefLogView"),
+        display_name: "Defender Event Log",
         category: ToolCategory::Evtx,
         description: "Windows Defender Operational (1006..1015, 1116..1119, 5001..5012) threat/scan log",
         read_only: true,
@@ -137,7 +137,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "evtx.timeline",
         cli_subcommand: "evtx timeline",
-        nirsoft_equivalent: Some("ComputerTimeLine"),
+        display_name: "EVTX Forensic Timeline",
         category: ToolCategory::Evtx,
         description: "Cross-channel normalized Windows Event Log forensic timeline",
         read_only: true,
@@ -147,7 +147,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "evtx.rdp",
         cli_subcommand: "evtx rdp",
-        nirsoft_equivalent: None,
+        display_name: "RDP Session History",
         category: ToolCategory::Evtx,
         description: "TerminalServices LSM (21..25) and RCM (1149) RDP session history view",
         read_only: true,
@@ -157,7 +157,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "evtx.powershell",
         cli_subcommand: "evtx powershell",
-        nirsoft_equivalent: None,
+        display_name: "PowerShell Script Audit",
         category: ToolCategory::Evtx,
         description: "PowerShell Operational (4103/4104) and classic (400/600) script audit view",
         read_only: true,
@@ -167,7 +167,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "evtx.process",
         cli_subcommand: "evtx process",
-        nirsoft_equivalent: None,
+        display_name: "Process Creation Events",
         category: ToolCategory::Evtx,
         description: "Security EID 4688 and Sysmon EID 1 process creation EVTX view",
         read_only: true,
@@ -177,7 +177,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "evtx.tasks",
         cli_subcommand: "evtx tasks",
-        nirsoft_equivalent: None,
+        display_name: "Task Scheduler Events",
         category: ToolCategory::Evtx,
         description: "Task Scheduler Operational (100..103, 106, 140, 200, 201) execution view",
         read_only: true,
@@ -187,7 +187,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "evtx.usb",
         cli_subcommand: "evtx usb",
-        nirsoft_equivalent: None,
+        display_name: "USB & PnP Event Log",
         category: ToolCategory::Evtx,
         description: "Kernel-PnP (400..430) and DriverFrameworks (2003..2102) USB/PnP event view",
         read_only: true,
@@ -198,7 +198,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "hive.scan",
         cli_subcommand: "hive scan",
-        nirsoft_equivalent: Some("RegScanner"),
+        display_name: "Registry Scanner",
         category: ToolCategory::Hive,
         description: "Recursive Windows Registry scanner with type, date, length, and regex filters",
         read_only: true,
@@ -208,7 +208,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "hive.diff",
         cli_subcommand: "hive diff",
-        nirsoft_equivalent: Some("RegistryChangesView"),
+        display_name: "Registry Changes Diff",
         category: ToolCategory::Hive,
         description: "Registry comparison across snapshots, live hives, offline regf files, or VSS",
         read_only: true,
@@ -218,7 +218,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "hive.offline",
         cli_subcommand: "hive offline",
-        nirsoft_equivalent: Some("OfflineRegistryView"),
+        display_name: "Offline Registry View",
         category: ToolCategory::Hive,
         description: "Pure-Rust offline regf/hbin Registry hive key and value browser",
         read_only: true,
@@ -228,7 +228,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "hive.find",
         cli_subcommand: "hive find",
-        nirsoft_equivalent: Some("OfflineRegistryFinder"),
+        display_name: "Offline Registry Finder",
         category: ToolCategory::Hive,
         description: "Pure-Rust regf deep search by string, hex bytes, timestamp, or value type",
         read_only: true,
@@ -238,7 +238,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "hive.export",
         cli_subcommand: "hive export",
-        nirsoft_equivalent: Some("RegFileExport"),
+        display_name: "Registry File Export",
         category: ToolCategory::Hive,
         description: "Pure-Rust tolerant regf to .reg (REGEDIT4/5) exporter recovering malformed cells",
         read_only: true,
@@ -248,7 +248,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "hive.watch",
         cli_subcommand: "hive watch",
-        nirsoft_equivalent: Some("RegFromApp"),
+        display_name: "Registry Activity Watch (ETW)",
         category: ToolCategory::Hive,
         description: "ETW Microsoft-Windows-Kernel-Registry ({70EB4F03-...}) monitor and .reg trace parser",
         read_only: true,
@@ -259,7 +259,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "srum.db",
         cli_subcommand: "srum db",
-        nirsoft_equivalent: Some("ESEDatabaseView"),
+        display_name: "ESE Database Browser",
         category: ToolCategory::Srum,
         description: "Pure-Rust ESE (0x89ABCDEF) MSysObjects catalog and generic table browser",
         read_only: true,
@@ -269,7 +269,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "srum.net",
         cli_subcommand: "srum net",
-        nirsoft_equivalent: Some("NetworkUsageView"),
+        display_name: "SRUM Network Usage",
         category: ToolCategory::Srum,
         description: "SRUM {973F5D5C-...} and SruDbIdMapTable per-app/user network usage view",
         read_only: true,
@@ -279,7 +279,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "srum.app",
         cli_subcommand: "srum app",
-        nirsoft_equivalent: None,
+        display_name: "SRUM Application Resource Usage",
         category: ToolCategory::Srum,
         description: "SRUM {D10CA2FE-...} Application Resource Usage (CPU cycles, I/O, context switches) view",
         read_only: true,
@@ -289,7 +289,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "srum.energy",
         cli_subcommand: "srum energy",
-        nirsoft_equivalent: None,
+        display_name: "SRUM Energy & Connectivity",
         category: ToolCategory::Srum,
         description: "SRUM {FEE4E14F-...} Energy and {DD6636C4-...} Network Connectivity view",
         read_only: true,
@@ -300,7 +300,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "artifacts.activity",
         cli_subcommand: "artifacts activity",
-        nirsoft_equivalent: Some("LastActivityView"),
+        display_name: "Cross-Artifact Activity Timeline",
         category: ToolCategory::Artifacts,
         description: "Cross-artifact forensic activity timeline correlating Prefetch, Registry, EVTX, Recent, and JumpLists",
         read_only: true,
@@ -310,7 +310,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "artifacts.prefetch",
         cli_subcommand: "artifacts prefetch",
-        nirsoft_equivalent: Some("WinPrefetchView"),
+        display_name: "Windows Prefetch View",
         category: ToolCategory::Artifacts,
         description: "Pure-Rust MAM\\x04 LZ77/XPRESS Huffman and SCCA v17/23/26/30 .pf Prefetch parser",
         read_only: true,
@@ -320,7 +320,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "artifacts.jumplists",
         cli_subcommand: "artifacts jumplists",
-        nirsoft_equivalent: Some("JumpListsView"),
+        display_name: "Windows Jump Lists View",
         category: ToolCategory::Artifacts,
         description: "Pure-Rust OLE2/CFBF DestList and [MS-SHLLINK] LNK JumpList parser",
         read_only: true,
@@ -330,7 +330,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "artifacts.shellbags",
         cli_subcommand: "artifacts shellbags",
-        nirsoft_equivalent: Some("ShellBagsView"),
+        display_name: "ShellBags View",
         category: ToolCategory::Artifacts,
         description: "UsrClass.dat/NTUSER.DAT BagMRU SHITEMID PIDL folder access parser",
         read_only: true,
@@ -340,7 +340,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "artifacts.userassist",
         cli_subcommand: "artifacts userassist",
-        nirsoft_equivalent: Some("UserAssistView"),
+        display_name: "UserAssist View",
         category: ToolCategory::Artifacts,
         description: "UserAssist ROT13 decoder and 16/72-byte execution counter parser",
         read_only: true,
@@ -350,7 +350,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "artifacts.muicache",
         cli_subcommand: "artifacts muicache",
-        nirsoft_equivalent: Some("MUICacheView"),
+        display_name: "MUICache View",
         category: ToolCategory::Artifacts,
         description: "MuiCache Registry application path and display name parser",
         read_only: true,
@@ -360,7 +360,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "artifacts.opensave",
         cli_subcommand: "artifacts opensave",
-        nirsoft_equivalent: Some("OpenSaveFilesView"),
+        display_name: "OpenSave Files View",
         category: ToolCategory::Artifacts,
         description: "OpenSavePidlMRU and LastVisitedPidlMRU file dialog PIDL decoder",
         read_only: true,
@@ -370,7 +370,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "artifacts.recent",
         cli_subcommand: "artifacts recent",
-        nirsoft_equivalent: Some("RecentFilesView"),
+        display_name: "Recent Files View",
         category: ToolCategory::Artifacts,
         description: "Pure-Rust [MS-SHLLINK] .lnk recent files and target metadata parser",
         read_only: true,
@@ -380,7 +380,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "artifacts.executed",
         cli_subcommand: "artifacts executed",
-        nirsoft_equivalent: Some("ExecutedProgramsList"),
+        display_name: "Executed Programs View",
         category: ToolCategory::Artifacts,
         description: "Aggregated execution evidence across UserAssist, Bam/Dam, ShimCache, Amcache, Prefetch, and MUICache",
         read_only: true,
@@ -390,7 +390,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "artifacts.usb_devices",
         cli_subcommand: "artifacts usb-devices",
-        nirsoft_equivalent: Some("USBDeview"),
+        display_name: "USB Devices View",
         category: ToolCategory::Artifacts,
         description: "USBSTOR, USB, MountedDevices, and SetupAPI USB device inventory",
         read_only: true,
@@ -400,7 +400,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "artifacts.usb_log",
         cli_subcommand: "artifacts usb-log",
-        nirsoft_equivalent: Some("USBLogView"),
+        display_name: "USB Log View",
         category: ToolCategory::Artifacts,
         description: "setupapi.dev.log offline parser and live PnP plug/unplug notification view",
         read_only: true,
@@ -410,7 +410,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "artifacts.vss",
         cli_subcommand: "artifacts vss",
-        nirsoft_equivalent: Some("ShadowCopyView"),
+        display_name: "Shadow Copy Catalog",
         category: ToolCategory::Artifacts,
         description: "Read-only WMI Win32_ShadowCopy/VSS enumeration and offline VSS catalog parser",
         read_only: true,
@@ -420,7 +420,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "artifacts.previous",
         cli_subcommand: "artifacts previous",
-        nirsoft_equivalent: Some("PreviousFilesRecovery"),
+        display_name: "Previous File Versions",
         category: ToolCategory::Artifacts,
         description: "Read-only VSS shadow-volume file browser and safe copy-out restore view",
         read_only: true,
@@ -430,7 +430,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "artifacts.profiles",
         cli_subcommand: "artifacts profiles",
-        nirsoft_equivalent: Some("UserProfilesView"),
+        display_name: "User Profiles View",
         category: ToolCategory::Artifacts,
         description: "ProfileList live and offline SOFTWARE hive user profile inventory",
         read_only: true,
@@ -441,7 +441,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "crash.bsod",
         cli_subcommand: "crash bsod",
-        nirsoft_equivalent: Some("BlueScreenView"),
+        display_name: "BSOD Minidumps",
         category: ToolCategory::Crash,
         description: "Pure-Rust MDMP kernel/BSOD minidump analyzer (SystemInfo, Exception, ModuleList)",
         read_only: true,
@@ -451,7 +451,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "crash.wer",
         cli_subcommand: "crash wer",
-        nirsoft_equivalent: Some("AppCrashView"),
+        display_name: "Windows Error Reporting",
         category: ToolCategory::Crash,
         description: "UTF-16LE / UTF-8 Report.wer Windows Error Reporting crash parser",
         read_only: true,
@@ -461,7 +461,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "crash.report",
         cli_subcommand: "crash report",
-        nirsoft_equivalent: Some("WinCrashReport"),
+        display_name: "User-Mode Crash Reports",
         category: ToolCategory::Crash,
         description: "User-mode MDMP and PE export / dbghelp crash report viewer (no DLL injection)",
         read_only: true,
@@ -472,7 +472,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "posture.updates",
         cli_subcommand: "posture updates",
-        nirsoft_equivalent: Some("WinUpdatesView"),
+        display_name: "Windows Updates History",
         category: ToolCategory::Posture,
         description: "Windows Update Agent COM (IUpdateSearcher) and offline DataStore.edb history view",
         read_only: true,
@@ -482,7 +482,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "posture.full_updates",
         cli_subcommand: "posture full-updates",
-        nirsoft_equivalent: Some("FullUpdatesHistoryView"),
+        display_name: "Full Updates History",
         category: ToolCategory::Posture,
         description: "USOPrivate\\UpdateStore\\store.db, CBS.log, and DataStore.edb update history",
         read_only: true,
@@ -492,7 +492,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "posture.defender_status",
         cli_subcommand: "posture defender-status",
-        nirsoft_equivalent: None,
+        display_name: "Windows Defender Posture",
         category: ToolCategory::Posture,
         description: "Windows Defender MSFT_MpComputerStatus/MSFT_MpPreference and Registry posture view",
         read_only: true,
@@ -502,7 +502,7 @@ pub static FORENSIC_TOOL_CATALOG: &[ToolDescriptor] = &[
     ToolDescriptor {
         tool_id: "posture.security_center",
         cli_subcommand: "posture security-center",
-        nirsoft_equivalent: None,
+        display_name: "Windows Security Center Posture",
         category: ToolCategory::Posture,
         description: "WMI root\\SecurityCenter2 AV/Firewall/AntiSpyware productState bitmask decoder",
         read_only: true,

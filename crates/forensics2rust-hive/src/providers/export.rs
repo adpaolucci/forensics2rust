@@ -8,12 +8,12 @@ use crate::reg_format::{RegExportFormat, RegExportOptions, RegExportResult, expo
 use crate::regf::RegfHive;
 
 #[derive(Debug, Clone)]
-pub struct RegFileExportProvider {
+pub struct RegistryFileExportProvider {
     source: ForensicSource,
     options: RegExportOptions,
 }
 
-impl RegFileExportProvider {
+impl RegistryFileExportProvider {
     pub const TOOL_ID: &'static str = "hive.export";
     pub const DESCRIPTION: &'static str =
         "Pure-Rust tolerant regf to .reg (REGEDIT4/5) exporter recovering malformed cells";
@@ -101,7 +101,7 @@ impl RegFileExportProvider {
     }
 }
 
-impl TableProvider for RegFileExportProvider {
+impl TableProvider for RegistryFileExportProvider {
     fn tool_id(&self) -> &'static str {
         Self::TOOL_ID
     }

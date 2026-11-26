@@ -95,7 +95,7 @@ fn datastore_edb_parses_joins_updates_and_localized_fallback() {
     assert_eq!(r2.result_code, "Aborted");
     assert_eq!(r2.kb_article.as_deref(), Some("KB5049999"));
 
-    // Provider OfflineBytes + OfflinePath + GetNirQuery filtering/sorting
+    // Provider OfflineBytes + OfflinePath + GuapQuery filtering/sorting
     let provider = PostureUpdatesProvider::new(ForensicSource::OfflineBytes(edb_bytes.clone()));
     let table = provider.query(&TableQuery::default()).expect("provider query");
     assert_eq!(table.total_rows, 3);
@@ -116,7 +116,7 @@ fn datastore_edb_parses_joins_updates_and_localized_fallback() {
         0,
         None,
     )
-    .expect("GetNir filter");
+    .expect("GuapQuery filter");
     assert_eq!(filtered.total_rows, 1);
     assert_eq!(filtered.rows[0].cells[2], CellValue::Text("KB5045594".to_string()));
 }

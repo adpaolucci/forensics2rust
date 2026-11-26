@@ -1,11 +1,11 @@
 #![forbid(unsafe_code)]
 
 //! Providers 4, 5, 6, 7, and 14 (Registry-backed user & profile artifacts):
-//! - `ShellBagsView` (`artifacts.shellbags`)
-//! - `UserAssistView` (`artifacts.userassist`)
-//! - `MUICacheView` (`artifacts.muicache`)
-//! - `OpenSaveFilesView` (`artifacts.opensave`)
-//! - `UserProfilesView` (`artifacts.profiles`)
+//! - ShellBags View (`artifacts.shellbags`)
+//! - UserAssist View (`artifacts.userassist`)
+//! - MUICache View (`artifacts.muicache`)
+//! - OpenSave Files View (`artifacts.opensave`)
+//! - User Profiles View (`artifacts.profiles`)
 
 use std::collections::HashSet;
 use std::path::Path;
@@ -24,7 +24,7 @@ use crate::parsers::registry_artifacts::{
 use crate::providers::{apply_rows, col, non_empty_text, opt_text, opt_timestamp};
 
 // ---------------------------------------------------------------------------
-// 4. artifacts.shellbags — ShellBagsView
+// 4. artifacts.shellbags — ShellBags View
 // ---------------------------------------------------------------------------
 
 pub struct ShellBagsProvider {
@@ -75,7 +75,7 @@ fn load_shellbags(source: &ForensicSource) -> Result<(Vec<ShellBagRecord>, Vec<D
         #[cfg(not(windows))]
         return Err(ForensicError::unsupported_platform(
             "artifacts.shellbags",
-            "live ShellBagsView requires Windows",
+            "live artifacts.shellbags requires Windows",
         ));
 
         #[cfg(windows)]
@@ -181,7 +181,7 @@ impl TableProvider for ShellBagsProvider {
 }
 
 // ---------------------------------------------------------------------------
-// 5. artifacts.userassist — UserAssistView
+// 5. artifacts.userassist — UserAssist View
 // ---------------------------------------------------------------------------
 
 pub struct UserAssistProvider {
@@ -239,7 +239,7 @@ fn load_userassist(source: &ForensicSource) -> Result<(Vec<UserAssistRecord>, Ve
         #[cfg(not(windows))]
         return Err(ForensicError::unsupported_platform(
             "artifacts.userassist",
-            "live UserAssistView requires Windows",
+            "live artifacts.userassist requires Windows",
         ));
 
         #[cfg(windows)]
@@ -311,7 +311,7 @@ impl TableProvider for UserAssistProvider {
 }
 
 // ---------------------------------------------------------------------------
-// 6. artifacts.muicache — MUICacheView
+// 6. artifacts.muicache — MUICache View
 // ---------------------------------------------------------------------------
 
 pub struct MuiCacheProvider {
@@ -367,7 +367,7 @@ fn load_muicache(source: &ForensicSource) -> Result<(Vec<MuiCacheRecord>, Vec<Di
         #[cfg(not(windows))]
         return Err(ForensicError::unsupported_platform(
             "artifacts.muicache",
-            "live MUICacheView requires Windows",
+            "live artifacts.muicache requires Windows",
         ));
 
         #[cfg(windows)]
@@ -447,7 +447,7 @@ impl TableProvider for MuiCacheProvider {
 }
 
 // ---------------------------------------------------------------------------
-// 7. artifacts.opensave — OpenSaveFilesView
+// 7. artifacts.opensave — OpenSave Files View
 // ---------------------------------------------------------------------------
 
 pub struct OpenSaveProvider {
@@ -495,7 +495,7 @@ fn load_opensave(source: &ForensicSource) -> Result<(Vec<OpenSaveRecord>, Vec<Di
         #[cfg(not(windows))]
         return Err(ForensicError::unsupported_platform(
             "artifacts.opensave",
-            "live OpenSaveFilesView requires Windows",
+            "live artifacts.opensave requires Windows",
         ));
 
         #[cfg(windows)]
@@ -588,7 +588,7 @@ impl TableProvider for OpenSaveProvider {
 }
 
 // ---------------------------------------------------------------------------
-// 14. artifacts.profiles — UserProfilesView
+// 14. artifacts.profiles — User Profiles View
 // ---------------------------------------------------------------------------
 
 pub struct UserProfilesProvider {
@@ -637,7 +637,7 @@ fn load_profiles(source: &ForensicSource) -> Result<(Vec<UserProfileRecord>, Vec
         #[cfg(not(windows))]
         return Err(ForensicError::unsupported_platform(
             "artifacts.profiles",
-            "live UserProfilesView requires Windows",
+            "live artifacts.profiles requires Windows",
         ));
 
         #[cfg(windows)]

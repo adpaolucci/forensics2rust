@@ -1,7 +1,7 @@
 #![forbid(unsafe_code)]
 
 //! Pure-Rust Windows `SHITEMID` / `ITEMIDLIST` (PIDL) binary decoder shared by
-//! `ShellBagsView`, `OpenSaveFilesView`, and `[MS-SHLLINK]` `.lnk` parsing.
+//! `artifacts.shellbags`, `artifacts.opensave`, and `[MS-SHLLINK]` `.lnk` parsing.
 
 use chrono::{DateTime, NaiveDate, Utc};
 use forensics2rust_core::{filetime_to_utc, parse_guid_le_braced, read_utf16_le_nul};

@@ -1,7 +1,7 @@
 #![forbid(unsafe_code)]
 
 //! Pure-Rust `DataStore.edb` ESE parser and offline WUA JSON parser for `posture.updates`
-//! (`WinUpdatesView`) and `posture.full_updates` (`FullUpdatesHistoryView`).
+//! (Windows Updates History) and `posture.full_updates` (Full Updates History).
 
 use std::collections::HashMap;
 use std::path::Path;

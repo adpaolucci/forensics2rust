@@ -15,7 +15,7 @@ use forensics2rust_core::{FORENSIC_TOOL_CATALOG, ForensicError, ForensicSource, 
 use forensics2rust_hive::RegistryChangesProvider;
 use forensics2rust_srum::SrumDbProvider;
 use guap_mcp::{ActionCommand, ActionRiskLevel, MCP_PROTOCOL_VERSION, McpServerRegistry, McpToolError, PolicyMode};
-use guap_table::{FilterExpr, GetNirQuery, SortDirection, TableData, TableProvider, TableQuery, TableSchema};
+use guap_table::{FilterExpr, GuapQuery, SortDirection, TableData, TableProvider, TableQuery, TableSchema};
 use serde_json::{Map, Value, json};
 
 pub const SERVER_NAME: &str = "forensics2rust-mcp";
@@ -250,7 +250,7 @@ pub fn provider_for_tool(tool_id: &str, source: &ForensicSource) -> Option<Arc<d
 
 /// Strictly read-only `guap_mcp::ActionCommand` wrapper around any of the 45 DFIR
 /// `TableProvider`s, enabling per-call `source_path`/`offline_path` overrides as well
-/// as `filter`/`getnir`/`sort`/`columns`/`offset`/`limit` without modifying domain crates.
+/// as `filter`/`query`/`sort`/`columns`/`offset`/`limit` without modifying domain crates.
 struct ForensicTableAction {
     tool_id: &'static str,
     description: &'static str,
@@ -297,20 +297,20 @@ impl ActionCommand for ForensicTableAction {
         props.insert(
             "filter".to_string(),
             json!({
-                "description": "Filter expression string (GetNir syntax) or structured FilterExpr object"
+                "description": "Filter expression string (GuapQuery syntax) or structured FilterExpr object"
             }),
         );
         props.insert(
-            "getnir".to_string(),
+            "query".to_string(),
             json!({
                 "type": "string",
-                "description": "Alias for GetNir filter expression string"
+                "description": "Alias for GuapQuery filter expression string"
             }),
         );
         props.insert(
             "sort".to_string(),
             json!({
-                "description": "Sort clauses as [{ column, direction }] array or GetNir sort spec (e.g. 'col:desc,-other')",
+                "description": "Sort clauses as [{ column, direction }] array or GuapQuery sort spec (e.g. 'col:desc,-other')",
                 "items": {
                     "type": "object",
                     "properties": {
@@ -383,7 +383,7 @@ impl ActionCommand for ForensicTableAction {
                     "source_path"
                         | "offline_path"
                         | "filter"
-                        | "getnir"
+                        | "query"
                         | "sort"
                         | "columns"
                         | "offset"
@@ -486,14 +486,14 @@ fn parse_mcp_table_query(schema: &TableSchema, args: &Value) -> Result<TableQuer
     };
 
     let raw_filter = obj.get("filter");
-    let raw_getnir = obj.get("getnir");
+    let raw_query = obj.get("query");
 
-    let filter = match (raw_filter, raw_getnir) {
+    let filter = match (raw_filter, raw_query) {
         (Some(Value::String(f)), Some(Value::String(g)))
             if !f.trim().is_empty() && !g.trim().is_empty() && f.trim() != g.trim() =>
         {
             return Err(McpToolError::InvalidParams(
-                "conflicting 'filter' and 'getnir' expressions".into(),
+                "conflicting 'filter' and 'query' expressions".into(),
             ));
         }
         (Some(f), _) if !f.is_null() => parse_filter_value(f)?,
@@ -507,7 +507,7 @@ fn parse_mcp_table_query(schema: &TableSchema, args: &Value) -> Result<TableQuer
             if spec.trim().is_empty() {
                 Vec::new()
             } else {
-                let parsed = GetNirQuery::parse_sort(spec)?;
+                let parsed = GuapQuery::parse_sort(spec)?;
                 let mut resolved = Vec::with_capacity(parsed.len());
                 for (col, dir) in parsed {
                     let idx = schema
@@ -600,7 +600,7 @@ fn parse_filter_value(val: &Value) -> Result<Option<FilterExpr>, McpToolError> {
     match val {
         Value::Null => Ok(None),
         Value::String(s) if s.trim().is_empty() => Ok(None),
-        Value::String(s) => Ok(Some(GetNirQuery::parse_filter(s)?)),
+        Value::String(s) => Ok(Some(GuapQuery::parse_filter(s)?)),
         other => {
             let expr: FilterExpr = serde_json::from_value(other.clone())
                 .map_err(|e| McpToolError::InvalidParams(format!("invalid filter object: {e}")))?;
@@ -800,12 +800,12 @@ mod tests {
     }
 
     #[test]
-    fn jsonrpc_tools_call_executes_with_per_call_source_path_and_getnir_queries() {
+    fn jsonrpc_tools_call_executes_with_per_call_source_path_and_guap_query() {
         let suite = test_fixtures::SyntheticSuiteDir::create();
         // Server starts in Live mode, and per-call source_path/offline_path switches to offline fixtures!
         let registry = build_default_registry();
 
-        // 1. EVTX with source_path + getnir filter + limit
+        // 1. EVTX with source_path + query filter + limit
         let evtx_call = json!({
             "jsonrpc": "2.0",
             "id": 10,
@@ -814,7 +814,7 @@ mod tests {
                 "name": "evtx.all",
                 "arguments": {
                     "source_path": suite.evtx_file().display().to_string(),
-                    "getnir": "event_id == 4688",
+                    "query": "event_id == 4688",
                     "limit": 1,
                     "offset": 0
                 }

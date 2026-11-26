@@ -1,7 +1,7 @@
 #![forbid(unsafe_code)]
 
 //! Pure-Rust `setupapi.dev.log` parser supporting UTF-8, UTF-16LE (BOM-aware),
-//! and Latin-1 encodings for USB PnP device install/removal forensics (`USBLogView`).
+//! and Latin-1 encodings for USB PnP device install/removal forensics (`artifacts.usb_log`).
 
 use chrono::{DateTime, NaiveDateTime, Utc};
 use forensics2rust_core::read_utf16_le;

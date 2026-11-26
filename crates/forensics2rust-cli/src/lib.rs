@@ -14,8 +14,8 @@ use forensics2rust_artifacts::restore_previous_file;
 use forensics2rust_core::{FORENSIC_TOOL_CATALOG, ForensicSource, QueryHelper, ToolCategory, tools_by_category};
 use forensics2rust_hive::reg_format::RegExportFormat;
 use forensics2rust_hive::{
-    FindCriteria, OfflineFinderProvider, OfflineRegistryProvider, RegFileExportProvider, RegScannerProvider,
-    RegistryChangesProvider, ScanOptions,
+    FindCriteria, OfflineFinderProvider, OfflineRegistryProvider, RegistryChangesProvider, RegistryFileExportProvider,
+    RegistryScannerProvider, ScanOptions,
 };
 use forensics2rust_mcp::{
     build_registry, collect_all_providers, provider_for_tool, resolve_tool_source, serve_stdio, tools_manifest_json,
@@ -138,13 +138,13 @@ pub struct Cli {
     #[arg(long, global = true, value_name = "PATH")]
     pub custody: Option<PathBuf>,
 
-    /// GetNir filter expression (e.g. "event_id == 4688 && channel contains 'Security'")
+    /// Tabular filter expression (e.g. "event_id == 4688 && channel contains 'Security'")
     #[arg(long, global = true, value_name = "EXPR")]
     pub filter: Option<String>,
 
-    /// Alias for GetNir filter expression
-    #[arg(long, global = true, value_name = "EXPR")]
-    pub getnir: Option<String>,
+    /// Alias for tabular filter expression
+    #[arg(long = "query", global = true, value_name = "EXPR")]
+    pub query: Option<String>,
 
     /// Comma-separated sort specification (e.g. "timestamp:desc,event_id:asc" or "-timestamp")
     #[arg(long, global = true, value_name = "SPEC")]
@@ -276,23 +276,23 @@ pub struct DiffArgs {
 
 #[derive(Subcommand, Debug)]
 pub enum EvtxSubcommand {
-    /// FullEventLogView — all EVTX channels and files
+    /// All EVTX Events — all EVTX channels and files
     All(SourcePathArgs),
-    /// MyEventViewer — Application, System, and Security unified view
+    /// Legacy Event Logs — Application, System, and Security unified view
     Legacy(SourcePathArgs),
-    /// EventLogChannelsView — EVTX channel metadata and status
+    /// EVTX Channels — EVTX channel metadata and status
     Channels(SourcePathArgs),
-    /// EventLogSourcesView — Event Log publishers and provider DLLs
+    /// EVTX Event Sources — Event Log publishers and provider DLLs
     Sources(SourcePathArgs),
-    /// WinLogOnView — Security EID 4624/4634/4647/4625 logon sessions
+    /// Windows Logon Sessions — Security EID 4624/4634/4647/4625 logon sessions
     Logon(SourcePathArgs),
-    /// TurnedOnTimesView — System boot/shutdown/unexpected-shutdown events
+    /// System Uptime & Boot History — System boot/shutdown/unexpected-shutdown events
     Uptime(SourcePathArgs),
-    /// WifiHistoryView — WLAN-AutoConfig connection history
+    /// Wi-Fi Connection History — WLAN-AutoConfig connection history
     Wifi(SourcePathArgs),
-    /// WinDefLogView — Windows Defender Operational log view
+    /// Defender Event Log — Windows Defender Operational log view
     Defender(SourcePathArgs),
-    /// ComputerTimeLine — cross-channel normalized EVTX timeline
+    /// EVTX Forensic Timeline — cross-channel normalized EVTX timeline
     Timeline(SourcePathArgs),
     /// TerminalServices RDP logon/session history
     Rdp(SourcePathArgs),
@@ -308,7 +308,7 @@ pub enum EvtxSubcommand {
 
 #[derive(Subcommand, Debug)]
 pub enum HiveSubcommand {
-    /// RegScanner — recursive live or offline Registry scanner
+    /// Registry Scanner — recursive live or offline Registry scanner
     Scan {
         #[command(flatten)]
         src: SourcePathArgs,
@@ -322,7 +322,7 @@ pub enum HiveSubcommand {
         #[arg(long)]
         regex: bool,
     },
-    /// RegistryChangesView — compare snapshots, live hives, or offline regf files
+    /// Registry Changes Diff — compare snapshots, live hives, or offline regf files
     Diff {
         #[command(flatten)]
         src: SourcePathArgs,
@@ -333,7 +333,7 @@ pub enum HiveSubcommand {
         #[arg(long)]
         root_prefix: Option<String>,
     },
-    /// OfflineRegistryView — pure-Rust regf/hbin key and value browser
+    /// Offline Registry View — pure-Rust regf/hbin key and value browser
     Offline {
         #[command(flatten)]
         src: SourcePathArgs,
@@ -341,7 +341,7 @@ pub enum HiveSubcommand {
         #[arg(long)]
         key_prefix: Option<String>,
     },
-    /// OfflineRegistryFinder — pure-Rust regf deep search
+    /// Offline Registry Finder — pure-Rust regf deep search
     Find {
         #[command(flatten)]
         src: SourcePathArgs,
@@ -352,7 +352,7 @@ pub enum HiveSubcommand {
         #[arg(long)]
         hex: Option<String>,
     },
-    /// RegFileExport — tolerant regf to .reg (REGEDIT4/5) exporter
+    /// Registry File Export — tolerant regf to .reg (REGEDIT4/5) exporter
     Export {
         #[command(flatten)]
         src: SourcePathArgs,
@@ -363,13 +363,13 @@ pub enum HiveSubcommand {
         #[arg(long, value_name = "FILE")]
         reg_out: Option<PathBuf>,
     },
-    /// RegFromApp — ETW Kernel-Registry monitor and .reg/F2RETW01 trace parser
+    /// Registry Activity Watch (ETW) — ETW Kernel-Registry monitor and .reg/F2RETW01 trace parser
     Watch(SourcePathArgs),
 }
 
 #[derive(Subcommand, Debug)]
 pub enum SrumSubcommand {
-    /// ESEDatabaseView — MSysObjects catalog and generic ESE table browser
+    /// ESE Database Browser — MSysObjects catalog and generic ESE table browser
     Db {
         #[command(flatten)]
         src: SourcePathArgs,
@@ -377,7 +377,7 @@ pub enum SrumSubcommand {
         #[arg(long)]
         table: Option<String>,
     },
-    /// NetworkUsageView — SRUM {973F5D5C-...} per-app network usage
+    /// SRUM Network Usage — SRUM {973F5D5C-...} per-app network usage
     Net(SourcePathArgs),
     /// SRUM {D10CA2FE-...} Application Resource Usage view
     App(SourcePathArgs),
@@ -387,31 +387,31 @@ pub enum SrumSubcommand {
 
 #[derive(Subcommand, Debug)]
 pub enum ArtifactsSubcommand {
-    /// LastActivityView — cross-artifact forensic activity timeline
+    /// Cross-Artifact Activity Timeline — correlated forensic activity timeline
     Activity(SourcePathArgs),
-    /// WinPrefetchView — MAM\x04 / SCCA .pf Prefetch parser
+    /// Windows Prefetch View — MAM\x04 / SCCA .pf Prefetch parser
     Prefetch(SourcePathArgs),
-    /// JumpListsView — OLE2/CFBF DestList and LNK parser
+    /// Windows Jump Lists View — OLE2/CFBF DestList and LNK parser
     Jumplists(SourcePathArgs),
-    /// ShellBagsView — BagMRU SHITEMID PIDL parser
+    /// ShellBags View — BagMRU SHITEMID PIDL parser
     Shellbags(SourcePathArgs),
-    /// UserAssistView — ROT13 and 16/72-byte execution counter parser
+    /// UserAssist View — ROT13 and 16/72-byte execution counter parser
     Userassist(SourcePathArgs),
-    /// MUICacheView — MuiCache Registry key parser
+    /// MUICache View — MuiCache Registry key parser
     Muicache(SourcePathArgs),
-    /// OpenSaveFilesView — OpenSavePidlMRU and LastVisitedPidlMRU decoder
+    /// OpenSave Files View — OpenSavePidlMRU and LastVisitedPidlMRU decoder
     Opensave(SourcePathArgs),
-    /// RecentFilesView — [MS-SHLLINK] .lnk recent files parser
+    /// Recent Files View — [MS-SHLLINK] .lnk recent files parser
     Recent(SourcePathArgs),
-    /// ExecutedProgramsList — aggregated execution evidence
+    /// Executed Programs View — aggregated execution evidence
     Executed(SourcePathArgs),
-    /// USBDeview — USBSTOR/USB/MountedDevices/SetupAPI inventory
+    /// USB Devices View — USBSTOR/USB/MountedDevices/SetupAPI inventory
     UsbDevices(SourcePathArgs),
-    /// USBLogView — setupapi.dev.log and PnP plug/unplug view
+    /// USB Log View — setupapi.dev.log and PnP plug/unplug view
     UsbLog(SourcePathArgs),
-    /// ShadowCopyView — read-only VSS catalog and shadow copy enumeration
+    /// Shadow Copy Catalog — read-only VSS catalog and shadow copy enumeration
     Vss(SourcePathArgs),
-    /// PreviousFilesRecovery — read-only shadow-volume browser and safe copy-out restore
+    /// Previous File Versions — read-only shadow-volume browser and safe copy-out restore
     Previous {
         #[command(flatten)]
         src: SourcePathArgs,
@@ -422,25 +422,25 @@ pub enum ArtifactsSubcommand {
         #[arg(long, value_name = "DEST_FILE")]
         dest: Option<PathBuf>,
     },
-    /// UserProfilesView — ProfileList live and offline SOFTWARE hive view
+    /// User Profiles View — ProfileList live and offline SOFTWARE hive view
     Profiles(SourcePathArgs),
 }
 
 #[derive(Subcommand, Debug)]
 pub enum CrashSubcommand {
-    /// BlueScreenView — pure-Rust MDMP kernel/BSOD minidump analyzer
+    /// BSOD Minidumps — pure-Rust MDMP kernel/BSOD minidump analyzer
     Bsod(SourcePathArgs),
-    /// AppCrashView — UTF-16LE / UTF-8 Report.wer parser
+    /// Windows Error Reporting — UTF-16LE / UTF-8 Report.wer parser
     Wer(SourcePathArgs),
-    /// WinCrashReport — user-mode MDMP and PE export crash report viewer
+    /// User-Mode Crash Reports — user-mode MDMP and PE export crash report viewer
     Report(SourcePathArgs),
 }
 
 #[derive(Subcommand, Debug)]
 pub enum PostureSubcommand {
-    /// WinUpdatesView — WUA COM and offline DataStore.edb update history
+    /// Windows Updates History — WUA COM and offline DataStore.edb update history
     Updates(SourcePathArgs),
-    /// FullUpdatesHistoryView — store.db, CBS.log, and DataStore.edb history
+    /// Full Updates History — store.db, CBS.log, and DataStore.edb history
     FullUpdates(SourcePathArgs),
     /// Windows Defender posture (MSFT_MpComputerStatus / Registry)
     DefenderStatus(SourcePathArgs),
@@ -546,7 +546,7 @@ fn run_hive_subcommand<W: Write>(cli: &Cli, action: &HiveSubcommand, out: &mut W
                 use_regex: *regex,
                 ..ScanOptions::default()
             };
-            let provider = RegScannerProvider::new(source.clone()).with_options(opts);
+            let provider = RegistryScannerProvider::new(source.clone()).with_options(opts);
             execute_and_emit_provider(cli, &provider, &source, out)
         }
         HiveSubcommand::Diff {
@@ -596,7 +596,7 @@ fn run_hive_subcommand<W: Write>(cli: &Cli, action: &HiveSubcommand, out: &mut W
             reg_out,
         } => {
             let source = resolve_tool_source("hive.export", &effective_source(cli.source.as_ref(), src.path.as_ref()))?;
-            let provider = RegFileExportProvider::new(source.clone()).with_format((*reg_format).into());
+            let provider = RegistryFileExportProvider::new(source.clone()).with_format((*reg_format).into());
             if let Some(reg_path) = reg_out {
                 let reg_text = provider.export_to_string()?;
                 if let Some(parent) = reg_path.parent().filter(|p| !p.as_os_str().is_empty()) {
@@ -695,9 +695,9 @@ fn effective_source(global: Option<&PathBuf>, local: Option<&PathBuf>) -> Forens
 }
 
 fn active_filter_expr(cli: &Cli) -> Result<Option<&str>> {
-    match (cli.filter.as_deref(), cli.getnir.as_deref()) {
+    match (cli.filter.as_deref(), cli.query.as_deref()) {
         (Some(f), Some(g)) if f.trim() != g.trim() => {
-            bail!("conflicting --filter and --getnir expressions supplied")
+            bail!("conflicting --filter and --query expressions supplied")
         }
         (Some(f), _) => Ok(Some(f)),
         (None, Some(g)) => Ok(Some(g)),
@@ -924,7 +924,7 @@ fn run_diff_command<W: Write>(cli: &Cli, args: &DiffArgs, out: &mut W) -> Result
     };
 
     let diff_data = diff_tables(&left_data, &right_data, &key_cols)?;
-    let filtered = QueryHelper::apply_getnir(
+    let filtered = QueryHelper::apply_query(
         &diff_data.schema,
         &diff_data.rows,
         parsed_columns(cli),

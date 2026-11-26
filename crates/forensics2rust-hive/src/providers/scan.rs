@@ -100,12 +100,12 @@ impl Matcher {
 }
 
 #[derive(Debug, Clone)]
-pub struct RegScannerProvider {
+pub struct RegistryScannerProvider {
     source: ForensicSource,
     options: ScanOptions,
 }
 
-impl RegScannerProvider {
+impl RegistryScannerProvider {
     pub const TOOL_ID: &'static str = "hive.scan";
     pub const DESCRIPTION: &'static str =
         "Recursive Windows Registry scanner with type, date, length, and regex filters";
@@ -406,7 +406,7 @@ impl RegScannerProvider {
     }
 }
 
-impl TableProvider for RegScannerProvider {
+impl TableProvider for RegistryScannerProvider {
     fn tool_id(&self) -> &'static str {
         Self::TOOL_ID
     }

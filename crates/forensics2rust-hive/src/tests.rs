@@ -11,8 +11,8 @@ use crate::etw::{
     export_watch_reg_script, normalize_nt_registry_path, parse_offline_watch_bytes,
 };
 use crate::providers::{
-    FindCriteria, OfflineFinderProvider, OfflineRegistryProvider, RegFileExportProvider, RegScannerProvider,
-    RegWatchProvider, RegistryChangesProvider, RegistrySnapshotEntry, ScanOptions,
+    FindCriteria, OfflineFinderProvider, OfflineRegistryProvider, RegWatchProvider, RegistryChangesProvider,
+    RegistryFileExportProvider, RegistryScannerProvider, RegistrySnapshotEntry, ScanOptions,
 };
 use crate::reg_format::{RegExportFormat, RegExportOptions, export_hive, parse_reg_script};
 use crate::regf::builder::{BuilderValue, RegfBuilder, SubkeyListKind};
@@ -286,7 +286,7 @@ fn carve_unallocated_and_reg_file_export_recover_deleted_cells() {
         Some("SecretTrail")
     );
 
-    let exporter = RegFileExportProvider::new(ForensicSource::OfflineBytes(bytes))
+    let exporter = RegistryFileExportProvider::new(ForensicSource::OfflineBytes(bytes))
         .with_format(RegExportFormat::Regedit5)
         .with_root_name("HKEY_LOCAL_MACHINE\\TESTHIVE");
     let res = exporter.export_to_result().expect("export result");
@@ -305,13 +305,13 @@ fn carve_unallocated_and_reg_file_export_recover_deleted_cells() {
     // Verify 80-col wrapping on large hex value
     let mut long_b = RegfBuilder::new("WRAP");
     long_b.add_binary("Long", "Blob", (0u8..80u8).collect());
-    let long_exp = RegFileExportProvider::new(ForensicSource::OfflineBytes(long_b.build()))
+    let long_exp = RegistryFileExportProvider::new(ForensicSource::OfflineBytes(long_b.build()))
         .export_to_string()
         .expect("long export");
     assert!(long_exp.contains("\\\r\n  "));
 
     // Verify REGEDIT4 export
-    let v4 = RegFileExportProvider::new(ForensicSource::OfflineBytes(build_base_fixture_bytes()))
+    let v4 = RegistryFileExportProvider::new(ForensicSource::OfflineBytes(build_base_fixture_bytes()))
         .with_format(RegExportFormat::Regedit4)
         .export_to_result()
         .expect("v4 export");
@@ -326,7 +326,7 @@ fn carve_unallocated_and_reg_file_export_recover_deleted_cells() {
 #[test]
 fn reg_format_roundtrip_and_reg_watch_offline_reg_parsing() {
     let bytes = build_base_fixture_bytes();
-    let exporter = RegFileExportProvider::new(ForensicSource::OfflineBytes(bytes))
+    let exporter = RegistryFileExportProvider::new(ForensicSource::OfflineBytes(bytes))
         .with_include_deleted(false)
         .with_root_name("HKEY_LOCAL_MACHINE\\SOFTWARE\\RoundTrip");
     let exported = exporter.export_to_result().expect("export");
@@ -639,13 +639,13 @@ fn etw_f2retw01_decodes_all_15_events_and_caches_key_objects() {
 }
 
 #[test]
-fn getnir_queries_work_by_both_column_id_and_label() {
+fn guap_query_works_by_both_column_id_and_label() {
     let src = ForensicSource::OfflineBytes(build_base_fixture_bytes());
     let offline = OfflineRegistryProvider::new(src.clone());
 
     let schema = offline.schema();
     // Filter using PascalCase label, sort using snake_case id, project mixed id+label
-    let q = QueryHelper::build_getnir_query(
+    let q = QueryHelper::build_query(
         &schema,
         Some(vec![
             "key_path".to_owned(),
@@ -658,16 +658,16 @@ fn getnir_queries_work_by_both_column_id_and_label() {
         0,
         Some(10),
     )
-    .expect("GetNirQuery should parse mixed id/label");
+    .expect("GuapQuery should parse mixed id/label");
 
-    let res = offline.query(&q).expect("execute GetNirQuery");
+    let res = offline.query(&q).expect("execute GuapQuery");
     assert_eq!(res.total_rows, 1);
     assert_eq!(res.schema.columns.len(), 4);
     assert_eq!(res.rows[0].cells[1].to_string(), "BuildNum");
 
-    // Scan provider GetNirQuery on offline hive using BytesSize numeric filter
-    let scan = RegScannerProvider::new(src);
-    let scan_q = QueryHelper::build_getnir_query(
+    // Scan provider GuapQuery on offline hive using BytesSize numeric filter
+    let scan = RegistryScannerProvider::new(src);
+    let scan_q = QueryHelper::build_query(
         &scan.schema(),
         None,
         Some("DataLen >= 8 && ValueType != \"REG_BINARY\""),
@@ -675,7 +675,7 @@ fn getnir_queries_work_by_both_column_id_and_label() {
         0,
         None,
     )
-    .expect("scan GetNirQuery");
+    .expect("scan GuapQuery");
     let scan_res = scan.query(&scan_q).expect("scan query");
     assert!(scan_res.total_rows >= 3);
 }
@@ -689,7 +689,7 @@ fn live_registry_and_etw_error_handling_graceful() {
     let find_live = OfflineFinderProvider::new(ForensicSource::Live);
     assert!(find_live.query(&TableQuery::default()).is_err());
 
-    let export_live = RegFileExportProvider::new(ForensicSource::Live);
+    let export_live = RegistryFileExportProvider::new(ForensicSource::Live);
     assert!(export_live.query(&TableQuery::default()).is_err());
 
     // Live ETW: non-elevated => PermissionDenied (or succeeds if elevated on Windows; UnsupportedPlatform elsewhere)
@@ -709,7 +709,7 @@ fn live_registry_and_etw_error_handling_graceful() {
     assert!(matches!(watch_res, Err(ForensicError::UnsupportedPlatform { .. })));
 
     // Live Registry scan on HKCU\Software (bounded depth=1, max_keys=10)
-    let scan_live = RegScannerProvider::new(ForensicSource::Live).with_options(ScanOptions {
+    let scan_live = RegistryScannerProvider::new(ForensicSource::Live).with_options(ScanOptions {
         roots: vec!["HKCU\\Software".to_owned()],
         max_depth: Some(1),
         max_keys: Some(10),
@@ -729,13 +729,13 @@ fn live_registry_and_etw_error_handling_graceful() {
     // and HKLM top-level descent skips protected child keys with DiagnosticWarning without aborting.
     #[cfg(windows)]
     {
-        let missing_live = RegScannerProvider::new(ForensicSource::Live).with_options(ScanOptions {
+        let missing_live = RegistryScannerProvider::new(ForensicSource::Live).with_options(ScanOptions {
             roots: vec!["HKCU\\Software\\GUAP_NONEXISTENT_KEY_99999".to_owned()],
             ..Default::default()
         });
         assert!(matches!(missing_live.collect_rows(), Err(ForensicError::NotFound(_))));
 
-        let sec_live = RegScannerProvider::new(ForensicSource::Live).with_options(ScanOptions {
+        let sec_live = RegistryScannerProvider::new(ForensicSource::Live).with_options(ScanOptions {
             roots: vec!["HKLM\\SECURITY".to_owned()],
             max_depth: Some(0),
             max_keys: Some(1),
@@ -746,7 +746,7 @@ fn live_registry_and_etw_error_handling_graceful() {
             Err(other) => panic!("unexpected error on HKLM\\SECURITY: {other}"),
         }
 
-        let hklm_top = RegScannerProvider::new(ForensicSource::Live).with_options(ScanOptions {
+        let hklm_top = RegistryScannerProvider::new(ForensicSource::Live).with_options(ScanOptions {
             roots: vec!["HKLM".to_owned()],
             max_depth: Some(1),
             max_keys: Some(8),

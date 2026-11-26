@@ -960,7 +960,7 @@ pub fn build_setupapi_dev_log() -> String {
 }
 
 /// Builds a minimal valid `[MS-EVEN6]` EVTX archive with one Security 4688 (Process Created)
-/// inline-BinXML event for `LastActivityView` correlation testing.
+/// inline-BinXML event for `artifacts.activity` correlation testing.
 pub fn build_minimal_evtx(when: DateTime<Utc>, process_name: &str) -> Vec<u8> {
     const CHUNK_SIZE: usize = 65_536;
     let mut chunk = vec![0u8; 0x200];

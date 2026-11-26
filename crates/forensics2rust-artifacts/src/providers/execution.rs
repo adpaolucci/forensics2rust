@@ -1,11 +1,11 @@
 #![forbid(unsafe_code)]
 
 //! Providers 1, 2, 3, 8, and 9:
-//! - `LastActivityView` (`artifacts.activity`)
-//! - `WinPrefetchView` (`artifacts.prefetch`)
-//! - `JumpListsView` (`artifacts.jumplists`)
-//! - `RecentFilesView` (`artifacts.recent`)
-//! - `ExecutedProgramsList` (`artifacts.executed`)
+//! - Cross-Artifact Activity Timeline (`artifacts.activity`)
+//! - Windows Prefetch View (`artifacts.prefetch`)
+//! - Windows Jump Lists View (`artifacts.jumplists`)
+//! - Recent Files View (`artifacts.recent`)
+//! - Executed Programs View (`artifacts.executed`)
 
 use std::fs;
 use std::path::Path;
@@ -26,7 +26,7 @@ use crate::parsers::prefetch::parse_prefetch;
 use crate::providers::{apply_rows, col, non_empty_text, opt_text, opt_text_owned, opt_timestamp};
 
 // ---------------------------------------------------------------------------
-// 1. artifacts.activity — LastActivityView
+// 1. artifacts.activity — Cross-Artifact Activity Timeline
 // ---------------------------------------------------------------------------
 
 pub struct LastActivityProvider {
@@ -77,7 +77,7 @@ impl TableProvider for LastActivityProvider {
     fn schema(&self) -> TableSchema {
         TableSchema::new(
             self.tool_id(),
-            "LastActivityView",
+            "Cross-Artifact Activity Timeline",
             vec![
                 col("action_time", "ActionTime", ColumnType::Timestamp, 180),
                 col("description", "Description", ColumnType::Text, 220),
@@ -100,7 +100,7 @@ impl TableProvider for LastActivityProvider {
 }
 
 // ---------------------------------------------------------------------------
-// 2. artifacts.prefetch — WinPrefetchView
+// 2. artifacts.prefetch — Windows Prefetch View
 // ---------------------------------------------------------------------------
 
 pub struct WinPrefetchProvider {
@@ -257,7 +257,7 @@ fn load_prefetch_items(
             #[cfg(not(windows))]
             return Err(ForensicError::unsupported_platform(
                 "artifacts.prefetch",
-                "live WinPrefetchView requires Windows",
+                "live artifacts.prefetch requires Windows",
             ));
 
             #[cfg(windows)]
@@ -317,7 +317,7 @@ impl TableProvider for WinPrefetchProvider {
     fn schema(&self) -> TableSchema {
         TableSchema::new(
             self.tool_id(),
-            "WinPrefetchView",
+            "Windows Prefetch View",
             vec![
                 col("filename", "Filename", ColumnType::Text, 180),
                 col("created_time", "CreatedTime", ColumnType::Timestamp, 180),
@@ -343,7 +343,7 @@ impl TableProvider for WinPrefetchProvider {
 }
 
 // ---------------------------------------------------------------------------
-// 3. artifacts.jumplists — JumpListsView
+// 3. artifacts.jumplists — Windows Jump Lists View
 // ---------------------------------------------------------------------------
 
 pub struct JumpListsProvider {
@@ -474,7 +474,7 @@ fn load_jumplist_records(
             #[cfg(not(windows))]
             return Err(ForensicError::unsupported_platform(
                 "artifacts.jumplists",
-                "live JumpListsView requires Windows",
+                "live artifacts.jumplists requires Windows",
             ));
 
             #[cfg(windows)]
@@ -526,7 +526,7 @@ impl TableProvider for JumpListsProvider {
     fn schema(&self) -> TableSchema {
         TableSchema::new(
             self.tool_id(),
-            "JumpListsView",
+            "Windows Jump Lists View",
             vec![
                 col("app_id", "AppID", ColumnType::Text, 140),
                 col("app_name", "AppName", ColumnType::Text, 180),
@@ -553,7 +553,7 @@ impl TableProvider for JumpListsProvider {
 }
 
 // ---------------------------------------------------------------------------
-// 8. artifacts.recent — RecentFilesView
+// 8. artifacts.recent — Recent Files View
 // ---------------------------------------------------------------------------
 
 pub struct RecentFilesProvider {
@@ -700,7 +700,7 @@ fn load_recent_lnk_items(source: &ForensicSource) -> Result<(Vec<LoadedLnk>, Vec
             #[cfg(not(windows))]
             return Err(ForensicError::unsupported_platform(
                 "artifacts.recent",
-                "live RecentFilesView requires Windows",
+                "live artifacts.recent requires Windows",
             ));
 
             #[cfg(windows)]
@@ -745,7 +745,7 @@ impl TableProvider for RecentFilesProvider {
     fn schema(&self) -> TableSchema {
         TableSchema::new(
             self.tool_id(),
-            "RecentFilesView",
+            "Recent Files View",
             vec![
                 col("filename", "Filename", ColumnType::Text, 180),
                 col("full_path", "FullPath", ColumnType::Text, 320),
@@ -770,7 +770,7 @@ impl TableProvider for RecentFilesProvider {
 }
 
 // ---------------------------------------------------------------------------
-// 9. artifacts.executed — ExecutedProgramsList
+// 9. artifacts.executed — Executed Programs View
 // ---------------------------------------------------------------------------
 
 pub struct ExecutedProgramsProvider {
@@ -821,7 +821,7 @@ impl TableProvider for ExecutedProgramsProvider {
     fn schema(&self) -> TableSchema {
         TableSchema::new(
             self.tool_id(),
-            "ExecutedProgramsList",
+            "Executed Programs View",
             vec![
                 col("program_path", "ProgramPath", ColumnType::Text, 320),
                 col("last_executed", "LastExecuted", ColumnType::Timestamp, 180),

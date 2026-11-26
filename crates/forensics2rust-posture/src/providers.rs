@@ -1,8 +1,8 @@
 #![forbid(unsafe_code)]
 
 //! `guap_table::TableProvider` implementations for the 4 read-only `forensics2rust-posture` tools:
-//! - `posture.updates` (`WinUpdatesView`)
-//! - `posture.full_updates` (`FullUpdatesHistoryView`)
+//! - `posture.updates` (Windows Updates History)
+//! - `posture.full_updates` (Full Updates History)
 //! - `posture.defender_status`
 //! - `posture.security_center`
 
@@ -54,7 +54,7 @@ fn join_or_null(items: &[String]) -> CellValue {
 }
 
 // ---------------------------------------------------------------------------
-// 1. posture.updates (WinUpdatesView)
+// 1. posture.updates (Windows Updates History)
 // ---------------------------------------------------------------------------
 
 pub struct PostureUpdatesProvider {
@@ -133,7 +133,7 @@ impl TableProvider for PostureUpdatesProvider {
     fn schema(&self) -> TableSchema {
         TableSchema::new(
             self.tool_id(),
-            "Windows Updates History (WinUpdatesView)",
+            "Windows Updates History",
             vec![
                 ColumnDef::new("title", "Title", ColumnType::Text).with_width_hint(240),
                 ColumnDef::new("description", "Description", ColumnType::Text).with_width_hint(260),
@@ -265,7 +265,7 @@ fn collect_updates(
 }
 
 // ---------------------------------------------------------------------------
-// 2. posture.full_updates (FullUpdatesHistoryView)
+// 2. posture.full_updates (Full Updates History)
 // ---------------------------------------------------------------------------
 
 pub struct PostureFullUpdatesProvider {
@@ -333,7 +333,7 @@ impl TableProvider for PostureFullUpdatesProvider {
     fn schema(&self) -> TableSchema {
         TableSchema::new(
             self.tool_id(),
-            "Full Updates History (FullUpdatesHistoryView)",
+            "Full Updates History",
             vec![
                 ColumnDef::new("title", "Title", ColumnType::Text).with_width_hint(260),
                 ColumnDef::new("install_date", "InstallDate", ColumnType::Timestamp).with_width_hint(160),

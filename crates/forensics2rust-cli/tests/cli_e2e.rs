@@ -222,12 +222,12 @@ fn binary_offline_subcommand_query_export_and_custody_verification() {
     assert_eq!(manifest.merkle_root_sha256, compute_merkle_root_sha256(&[expected_256]));
     assert_eq!(manifest.merkle_root_sha512, compute_merkle_root_sha512(&[expected_512]));
 
-    // 2. Hive offline with --getnir and --format json
+    // 2. Hive offline with --query and --format json
     let hive_out = Command::new(cli_bin())
         .args([
             "--offline",
             dir.path().join("NTUSER.DAT").to_str().unwrap(),
-            "--getnir",
+            "--query",
             "value_name == 'Mode'",
             "--format",
             "json",

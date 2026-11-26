@@ -1,10 +1,10 @@
 #![deny(unsafe_code)]
 
 //! Read-only Windows DFIR artifact parsers and 14 [`guap_table::TableProvider`]
-//! views (`WinPrefetchView`, `RecentFilesView`, `JumpListsView`, `ShellBagsView`,
-//! `UserAssistView`, `MUICacheView`, `OpenSaveFilesView`, `ExecutedProgramsList`,
-//! `LastActivityView`, `USBDeview`, `USBLogView`, `ShadowCopyView`,
-//! `PreviousFilesRecovery`, `UserProfilesView`).
+//! views (`artifacts.prefetch`, `artifacts.recent`, `artifacts.jumplists`, `artifacts.shellbags`,
+//! `artifacts.userassist`, `artifacts.muicache`, `artifacts.opensave`, `artifacts.executed`,
+//! `artifacts.activity`, `artifacts.usb_devices`, `artifacts.usb_log`, `artifacts.vss`,
+//! `artifacts.previous`, `artifacts.profiles`).
 
 pub mod correlator;
 #[cfg(windows)]

@@ -16,8 +16,8 @@ pub mod regf;
 mod tests;
 
 pub use providers::{
-    FindCriteria, OfflineFinderProvider, OfflineRegistryProvider, RegFileExportProvider, RegScannerProvider,
-    RegWatchProvider, RegistryChangesProvider, RegistrySnapshotEntry, ScanOptions,
+    FindCriteria, OfflineFinderProvider, OfflineRegistryProvider, RegWatchProvider, RegistryChangesProvider,
+    RegistryFileExportProvider, RegistryScannerProvider, RegistrySnapshotEntry, ScanOptions,
 };
 
 /// Returns the crate metadata descriptor tuple `(crate_name, version)`.
@@ -33,11 +33,11 @@ pub fn domain_tools() -> Vec<&'static ToolDescriptor> {
 /// Constructs all 6 read-only Registry Hive [`TableProvider`] instances bound to `source`.
 pub fn all_providers(source: &ForensicSource) -> Vec<Arc<dyn TableProvider>> {
     vec![
-        Arc::new(RegScannerProvider::new(source.clone())),
+        Arc::new(RegistryScannerProvider::new(source.clone())),
         Arc::new(RegistryChangesProvider::new(source.clone())),
         Arc::new(OfflineRegistryProvider::new(source.clone())),
         Arc::new(OfflineFinderProvider::new(source.clone())),
-        Arc::new(RegFileExportProvider::new(source.clone())),
+        Arc::new(RegistryFileExportProvider::new(source.clone())),
         Arc::new(RegWatchProvider::new(source.clone())),
     ]
 }

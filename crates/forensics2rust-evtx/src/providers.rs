@@ -104,7 +104,7 @@ fn live_opts_with_xpath(base: &LiveQueryOptions, xpath: &str) -> LiveQueryOption
 }
 
 // ---------------------------------------------------------------------------
-// 1. evtx.all — FullEventLogView
+// 1. evtx.all — All EVTX Events
 // ---------------------------------------------------------------------------
 
 pub struct FullEventLogProvider {
@@ -184,7 +184,7 @@ impl TableProvider for FullEventLogProvider {
     fn schema(&self) -> TableSchema {
         TableSchema::new(
             self.tool_id(),
-            "FullEventLogView",
+            "All EVTX Events",
             vec![
                 col("record_id", "RecordID", ColumnType::Uint, 90),
                 col("event_time", "EventTime", ColumnType::Timestamp, 180),
@@ -212,7 +212,7 @@ impl TableProvider for FullEventLogProvider {
 }
 
 // ---------------------------------------------------------------------------
-// 2. evtx.legacy — MyEventViewer
+// 2. evtx.legacy — Legacy Event Logs
 // ---------------------------------------------------------------------------
 
 pub struct LegacyEventProvider {
@@ -242,7 +242,7 @@ impl TableProvider for LegacyEventProvider {
     fn schema(&self) -> TableSchema {
         TableSchema::new(
             self.tool_id(),
-            "MyEventViewer",
+            "Legacy Event Logs",
             vec![
                 col("record_number", "RecordNumber", ColumnType::Uint, 100),
                 col("time_generated", "TimeGenerated", ColumnType::Timestamp, 180),
@@ -321,7 +321,7 @@ fn legacy_event_type(rec: &EvtxRecord) -> &'static str {
 }
 
 // ---------------------------------------------------------------------------
-// 3. evtx.channels — EventLogChannelsView
+// 3. evtx.channels — EVTX Channels
 // ---------------------------------------------------------------------------
 
 pub struct ChannelsProvider {
@@ -346,7 +346,7 @@ impl TableProvider for ChannelsProvider {
     fn schema(&self) -> TableSchema {
         TableSchema::new(
             self.tool_id(),
-            "EventLogChannelsView",
+            "EVTX Channels",
             vec![
                 col("channel_name", "ChannelName", ColumnType::Text, 260),
                 col("log_file_path", "LogFilePath", ColumnType::Text, 300),
@@ -411,7 +411,7 @@ impl TableProvider for ChannelsProvider {
 }
 
 // ---------------------------------------------------------------------------
-// 4. evtx.sources — EventLogSourcesView
+// 4. evtx.sources — EVTX Event Sources
 // ---------------------------------------------------------------------------
 
 pub struct SourcesProvider {
@@ -436,7 +436,7 @@ impl TableProvider for SourcesProvider {
     fn schema(&self) -> TableSchema {
         TableSchema::new(
             self.tool_id(),
-            "EventLogSourcesView",
+            "EVTX Event Sources",
             vec![
                 col("source_name", "SourceName", ColumnType::Text, 240),
                 col("channel", "Channel", ColumnType::Text, 220),
@@ -494,7 +494,7 @@ impl TableProvider for SourcesProvider {
 }
 
 // ---------------------------------------------------------------------------
-// 5. evtx.logon — WinLogOnView
+// 5. evtx.logon — Windows Logon Sessions
 // ---------------------------------------------------------------------------
 
 pub struct LogonProvider {
@@ -524,7 +524,7 @@ impl TableProvider for LogonProvider {
     fn schema(&self) -> TableSchema {
         TableSchema::new(
             self.tool_id(),
-            "WinLogOnView",
+            "Windows Logon Sessions",
             vec![
                 col("logon_id", "LogonID", ColumnType::Text, 110),
                 col("user_name", "UserName", ColumnType::Text, 150),
@@ -736,7 +736,7 @@ fn format_logon_type(raw: &str) -> String {
 }
 
 // ---------------------------------------------------------------------------
-// 6. evtx.uptime — TurnedOnTimesView
+// 6. evtx.uptime — System Uptime & Boot History
 // ---------------------------------------------------------------------------
 
 pub struct UptimeProvider {
@@ -766,7 +766,7 @@ impl TableProvider for UptimeProvider {
     fn schema(&self) -> TableSchema {
         TableSchema::new(
             self.tool_id(),
-            "TurnedOnTimesView",
+            "System Uptime & Boot History",
             vec![
                 col("startup_time", "StartupTime", ColumnType::Timestamp, 180),
                 col("shutdown_time", "ShutdownTime", ColumnType::Timestamp, 180),
@@ -1050,7 +1050,7 @@ fn normalize_shutdown_type(raw: &str) -> String {
 }
 
 // ---------------------------------------------------------------------------
-// 7. evtx.wifi — WifiHistoryView
+// 7. evtx.wifi — Wi-Fi Connection History
 // ---------------------------------------------------------------------------
 
 pub struct WifiProvider {
@@ -1080,7 +1080,7 @@ impl TableProvider for WifiProvider {
     fn schema(&self) -> TableSchema {
         TableSchema::new(
             self.tool_id(),
-            "WifiHistoryView",
+            "Wi-Fi Connection History",
             vec![
                 col("event_time", "EventTime", ColumnType::Timestamp, 180),
                 col("event_type", "EventType", ColumnType::Text, 160),
@@ -1168,7 +1168,7 @@ impl TableProvider for WifiProvider {
 }
 
 // ---------------------------------------------------------------------------
-// 8. evtx.defender — WinDefLogView
+// 8. evtx.defender — Defender Event Log
 // ---------------------------------------------------------------------------
 
 pub struct DefenderProvider {
@@ -1198,7 +1198,7 @@ impl TableProvider for DefenderProvider {
     fn schema(&self) -> TableSchema {
         TableSchema::new(
             self.tool_id(),
-            "WinDefLogView",
+            "Defender Event Log",
             vec![
                 col("event_time", "EventTime", ColumnType::Timestamp, 180),
                 col("event_id", "EventID", ColumnType::Uint, 80),
@@ -1289,7 +1289,7 @@ fn defender_eid_action(eid: u16) -> &'static str {
 }
 
 // ---------------------------------------------------------------------------
-// 9. evtx.timeline — ComputerTimeLine
+// 9. evtx.timeline — EVTX Forensic Timeline
 // ---------------------------------------------------------------------------
 
 pub struct TimelineProvider {
@@ -1319,7 +1319,7 @@ impl TableProvider for TimelineProvider {
     fn schema(&self) -> TableSchema {
         TableSchema::new(
             self.tool_id(),
-            "ComputerTimeLine",
+            "EVTX Forensic Timeline",
             vec![
                 col("timestamp", "Timestamp", ColumnType::Timestamp, 180),
                 col("source_channel", "SourceChannel", ColumnType::Text, 200),

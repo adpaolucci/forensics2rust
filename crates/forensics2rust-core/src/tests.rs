@@ -373,7 +373,7 @@ fn query_helper_guap_table_integration() {
         ),
     ];
 
-    let filtered = QueryHelper::apply_getnir(
+    let filtered = QueryHelper::apply_query(
         &schema,
         &rows,
         Some(vec!["event_id".into(), "channel".into()]),
@@ -400,7 +400,7 @@ fn query_helper_guap_table_integration() {
     assert_eq!(from_provider.total_rows, 1);
     assert_eq!(from_provider.rows[0].cells[0], CellValue::Uint(6005));
 
-    let bad_col = QueryHelper::apply_getnir(&schema, &rows, None, Some("nonexistent=1"), None, 0, None);
+    let bad_col = QueryHelper::apply_query(&schema, &rows, None, Some("nonexistent=1"), None, 0, None);
     assert!(matches!(bad_col, Err(ForensicError::Table(_))));
 
     let empty = QueryHelper::empty(schema);
@@ -451,10 +451,11 @@ fn catalog_45_tools_invariants_and_r4() {
         assert_eq!(find_tool(desc.tool_id), Some(desc));
         assert_eq!(find_by_subcommand(desc.cli_subcommand), Some(desc));
 
+        assert!(!desc.display_name.trim().is_empty(), "empty display_name for {}", desc.tool_id);
         let haystacks = [
             desc.tool_id.to_ascii_lowercase(),
             desc.cli_subcommand.to_ascii_lowercase(),
-            desc.nirsoft_equivalent.unwrap_or("").to_ascii_lowercase(),
+            desc.display_name.to_ascii_lowercase(),
             desc.description.to_ascii_lowercase(),
         ];
         for banned in r4_forbidden {
