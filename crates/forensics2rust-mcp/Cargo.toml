@@ -1,0 +1,28 @@
+[package]
+name = "forensics2rust-mcp"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Strictly read-only JSON-RPC 2.0 stdio MCP server exposing all 45 forensics2rust tools"
+
+[dependencies]
+forensics2rust-core.workspace = true
+forensics2rust-evtx.workspace = true
+forensics2rust-hive.workspace = true
+forensics2rust-srum.workspace = true
+forensics2rust-crash.workspace = true
+forensics2rust-artifacts.workspace = true
+forensics2rust-posture.workspace = true
+guap-table.workspace = true
+guap-mcp.workspace = true
+anyhow.workspace = true
+thiserror.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tracing.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true

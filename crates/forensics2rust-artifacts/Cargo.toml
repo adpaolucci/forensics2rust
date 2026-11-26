@@ -1,0 +1,52 @@
+[package]
+name = "forensics2rust-artifacts"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "14 read-only Windows execution, JumpList, ShellBags, USB, and VSS DFIR artifact tools"
+
+[dependencies]
+forensics2rust-core.workspace = true
+forensics2rust-evtx.workspace = true
+forensics2rust-hive.workspace = true
+guap-table.workspace = true
+anyhow.workspace = true
+thiserror.workspace = true
+chrono.workspace = true
+regex.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+byteorder.workspace = true
+flate2.workspace = true
+hex.workspace = true
+crc32fast.workspace = true
+uuid.workspace = true
+walkdir.workspace = true
+tracing.workspace = true
+
+[target.'cfg(windows)'.dependencies]
+windows = { workspace = true, features = [
+    "Win32_Devices_DeviceAndDriverInstallation",
+    "Win32_Devices_Properties",
+    "Win32_Foundation",
+    "Win32_Security",
+    "Win32_Security_Authorization",
+    "Win32_Storage_FileSystem",
+    "Win32_Storage_Vss",
+    "Win32_System_Com",
+    "Win32_System_Ole",
+    "Win32_System_Registry",
+    "Win32_System_Rpc",
+    "Win32_System_Threading",
+    "Win32_System_Variant",
+    "Win32_System_Wmi",
+    "Win32_UI_Shell",
+    "Win32_UI_WindowsAndMessaging",
+] }
+
+[dev-dependencies]
+tempfile.workspace = true

@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.installer.1.9.0.schema.json
+
+PackageIdentifier: adpaolucci.forensics2rust
+PackageVersion: 0.1.0
+InstallerType: zip
+NestedInstallerType: portable
+NestedInstallerFiles:
+  - RelativeFilePath: forensics2rust.exe
+    PortableCommandAlias: forensics2rust
+  - RelativeFilePath: forensics2rust-win32.exe
+    PortableCommandAlias: forensics2rust-win32
+  - RelativeFilePath: forensics2rust-iced.exe
+    PortableCommandAlias: forensics2rust-iced
+ReleaseDate: 2026-11-23
+Installers:
+  - Architecture: x64
+    InstallerUrl: https://github.com/adpaolucci/forensics2rust/releases/download/v0.1.0/forensics2rust-x86_64-pc-windows-msvc.zip
+    InstallerSha256: 0000000000000000000000000000000000000000000000000000000000000000
+ManifestType: installer
+ManifestVersion: 1.9.0

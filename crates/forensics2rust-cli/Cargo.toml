@@ -1,0 +1,40 @@
+[package]
+name = "forensics2rust-cli"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Unified CLI binary (forensics2rust) for all 45 read-only DFIR tools, exports, MCP server, and GUI launcher"
+
+[[bin]]
+name = "forensics2rust"
+path = "src/main.rs"
+
+[dependencies]
+forensics2rust-core.workspace = true
+forensics2rust-evtx.workspace = true
+forensics2rust-hive.workspace = true
+forensics2rust-srum.workspace = true
+forensics2rust-crash.workspace = true
+forensics2rust-artifacts.workspace = true
+forensics2rust-posture.workspace = true
+forensics2rust-report.workspace = true
+forensics2rust-mcp.workspace = true
+guap-table.workspace = true
+guap-export.workspace = true
+guap-mcp.workspace = true
+anyhow.workspace = true
+chrono.workspace = true
+clap.workspace = true
+ctrlc.workspace = true
+dirs.workspace = true
+rfd.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true

@@ -1,0 +1,35 @@
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.defaultLocale.1.9.0.schema.json
+
+PackageIdentifier: adpaolucci.forensics2rust
+PackageVersion: 0.1.0
+PackageLocale: en-US
+Publisher: adpaolucci
+PublisherUrl: https://github.com/adpaolucci
+PublisherSupportUrl: https://github.com/adpaolucci/forensics2rust/issues
+PackageName: Forensics2Rust
+PackageUrl: https://forensics2rust.guap.ca
+License: Apache-2.0
+LicenseUrl: https://github.com/adpaolucci/forensics2rust/blob/main/LICENSE
+Copyright: Copyright (c) 2026 adpaolucci
+ShortDescription: 100% pure-Rust 45-tool read-only Windows DFIR suite with Win32 (WinSafe) & Iced GUIs, CLI, and MCP server.
+Description: >-
+  forensics2rust is a pure-Rust read-only Windows Digital Forensics and Incident Response (DFIR) suite spanning
+  45 tools across EVTX Event Logs, live & offline Registry hives, ESE SRUDB.dat telemetry, execution/USB/VSS
+  artifacts, Minidump/WER crashes, and security/update posture, with a native Win32 virtual-list console,
+  cross-platform Iced 0.14 GUI, CLI, Merkle chain-of-custody exports, and read-only MCP stdio server.
+Moniker: forensics2rust
+Tags:
+  - forensics
+  - dfir
+  - evtx
+  - windows
+  - rust
+  - cli
+  - gui
+  - mcp
+ReleaseNotesUrl: https://github.com/adpaolucci/forensics2rust/releases/tag/v0.1.0
+Documentations:
+  - DocumentLabel: Project Wiki
+    DocumentUrl: https://github.com/adpaolucci/forensics2rust/wiki
+ManifestType: defaultLocale
+ManifestVersion: 1.9.0

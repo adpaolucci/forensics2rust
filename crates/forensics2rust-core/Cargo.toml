@@ -1,0 +1,22 @@
+[package]
+name = "forensics2rust-core"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Core forensic source models, diagnostics, 45-tool catalog, Windows binary/timestamp/SID/GUID/UTF-16LE decoders, and guap-table query helpers for forensics2rust"
+
+[dependencies]
+guap-table.workspace = true
+thiserror.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+chrono.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+
+[dev-dependencies]
+regex.workspace = true
+tempfile.workspace = true

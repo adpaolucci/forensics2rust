@@ -1,0 +1,99 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/forensics2rust-core",
+    "crates/forensics2rust-evtx",
+    "crates/forensics2rust-hive",
+    "crates/forensics2rust-srum",
+    "crates/forensics2rust-crash",
+    "crates/forensics2rust-artifacts",
+    "crates/forensics2rust-posture",
+    "crates/forensics2rust-report",
+    "crates/forensics2rust-mcp",
+    "crates/forensics2rust-cli",
+    "crates/forensics2rust-win32",
+    "crates/forensics2rust-iced",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.88"
+license = "Apache-2.0"
+repository = "https://github.com/adpaolucci/forensics2rust"
+homepage = "https://forensics2rust.guap.ca"
+documentation = "https://forensics2rust.guap.ca"
+authors = ["Forensics2Rust Contributors"]
+description = "100% pure-Rust 45-tool read-only Windows DFIR suite (EVTX, Registry, SRUM, Crash, Artifacts, Posture), dual Win32/Iced GUIs, CLI, and MCP server"
+keywords = ["forensics", "dfir", "evtx", "windows", "mcp"]
+categories = ["command-line-utilities", "gui", "development-tools"]
+
+[workspace.dependencies]
+# Internal workspace crates
+forensics2rust-core = { path = "crates/forensics2rust-core" }
+forensics2rust-evtx = { path = "crates/forensics2rust-evtx" }
+forensics2rust-hive = { path = "crates/forensics2rust-hive" }
+forensics2rust-srum = { path = "crates/forensics2rust-srum" }
+forensics2rust-crash = { path = "crates/forensics2rust-crash" }
+forensics2rust-artifacts = { path = "crates/forensics2rust-artifacts" }
+forensics2rust-posture = { path = "crates/forensics2rust-posture" }
+forensics2rust-report = { path = "crates/forensics2rust-report" }
+forensics2rust-mcp = { path = "crates/forensics2rust-mcp" }
+
+# Shared GUAP Phase 0 foundation crates (relative from forensics2rust/Cargo.toml)
+guap-table = { path = "../guap-kit/crates/guap-table" }
+guap-export = { path = "../guap-kit/crates/guap-export" }
+guap-gui-win32 = { path = "../guap-kit/crates/guap-gui-win32" }
+guap-gui-iced = { path = "../guap-kit/crates/guap-gui-iced" }
+guap-mcp = { path = "../guap-kit/crates/guap-mcp" }
+
+# Core / utility (verified offline in Cargo registry cache; NO rayon)
+anyhow = "1.0"
+thiserror = "2.0"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+chrono = { version = "0.4", features = ["serde"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt"] }
+regex = "1.13"
+sha2 = "0.11"
+walkdir = "2.5"
+tempfile = "3.27"
+rusqlite = { version = "0.34", features = ["bundled"] }
+csv = "1.4"
+dirs = "7.0"
+flate2 = "1.1"
+crc32fast = "1.5"
+byteorder = "1.5"
+hex = "0.4"
+uuid = { version = "1.29", features = ["v4", "serde"] }
+quick-xml = "0.41"
+
+# Surface / GUI / CLI (verified offline)
+clap = { version = "4.6", features = ["derive"] }
+winsafe = { version = "0.0.29", features = ["gui", "shell"] }
+iced = { version = "0.14", features = ["wgpu", "tiny-skia", "tokio"] }
+tokio = "1.54"
+rfd = "0.18"
+arboard = "3.7"
+ctrlc = "3.5"
+
+# Windows OS APIs & build resource embedding (verified offline)
+windows = "0.62"
+embed-resource = "3.0"
+
+[profile.dev.package.clap]
+opt-level = 2
+
+[profile.dev.package.clap_builder]
+opt-level = 2
+
+[profile.dev.package.clap_derive]
+opt-level = 2
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+panic = "abort"
+strip = true

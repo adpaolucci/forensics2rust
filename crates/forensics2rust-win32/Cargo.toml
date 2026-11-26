@@ -1,0 +1,40 @@
+[package]
+name = "forensics2rust-win32"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Native zero-GPU Win32 virtual-list DFIR desktop console (forensics2rust-win32) via guap-gui-win32"
+
+[[bin]]
+name = "forensics2rust-win32"
+path = "src/main.rs"
+
+[dependencies]
+forensics2rust-core.workspace = true
+forensics2rust-evtx.workspace = true
+forensics2rust-hive.workspace = true
+forensics2rust-srum.workspace = true
+forensics2rust-crash.workspace = true
+forensics2rust-artifacts.workspace = true
+forensics2rust-posture.workspace = true
+forensics2rust-report.workspace = true
+guap-table.workspace = true
+guap-export.workspace = true
+guap-mcp.workspace = true
+guap-gui-win32.workspace = true
+anyhow.workspace = true
+arboard.workspace = true
+chrono.workspace = true
+clap.workspace = true
+dirs.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+
+[target.'cfg(windows)'.build-dependencies]
+embed-resource.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true

@@ -1,0 +1,120 @@
+# Smithery configuration for forensics2rust
+# https://smithery.ai
+name: forensics2rust-mcp
+version: "0.1.0"
+description: "100% pure-Rust 45-tool read-only Windows DFIR suite (EVTX, Registry, SRUM, Artifacts, Crash, Posture) with JSON-RPC 2.0 stdio MCP server"
+repository: "https://github.com/adpaolucci/forensics2rust"
+license: "Apache-2.0"
+
+entrypoint:
+  type: stdio
+  command: forensics2rust
+  args:
+    - mcp
+
+build:
+  type: cargo
+  crate: forensics2rust-cli
+
+tools:
+  # -evtx (14)
+  - name: evtx.all
+    description: "Full Windows Event Log viewer across .evtx files/directories and live channels"
+  - name: evtx.legacy
+    description: "Unified flat view across Application, System, and Security Event Logs"
+  - name: evtx.channels
+    description: "EVTX channel configuration, file path, size, and enabled status viewer"
+  - name: evtx.sources
+    description: "Event Log publisher and provider DLL metadata viewer"
+  - name: evtx.logon
+    description: "Security Event Log (4624/4634/4647/4625) logon session correlator"
+  - name: evtx.uptime
+    description: "System Event Log (6005/6006/6008/6009/1074/41/12/13) boot and shutdown analyzer"
+  - name: evtx.wifi
+    description: "WLAN-AutoConfig Operational (8001..8003, 11000..11010) Wi-Fi connection history"
+  - name: evtx.defender
+    description: "Windows Defender Operational (1006..1015, 1116..1119, 5001..5012) threat/scan log"
+  - name: evtx.timeline
+    description: "Cross-channel normalized Windows Event Log forensic timeline"
+  - name: evtx.rdp
+    description: "TerminalServices LSM (21..25) and RCM (1149) RDP session history view"
+  - name: evtx.powershell
+    description: "PowerShell Operational (4103/4104) and classic (400/600) script audit view"
+  - name: evtx.process
+    description: "Security EID 4688 and Sysmon EID 1 process creation EVTX view"
+  - name: evtx.tasks
+    description: "Task Scheduler Operational (100..103, 106, 140, 200, 201) execution view"
+  - name: evtx.usb
+    description: "Kernel-PnP (400..430) and DriverFrameworks (2003..2102) USB/PnP event view"
+
+  # -hive (6)
+  - name: hive.scan
+    description: "Recursive Windows Registry scanner with type, date, length, and regex filters"
+  - name: hive.diff
+    description: "Registry comparison across snapshots, live hives, offline regf files, or VSS"
+  - name: hive.offline
+    description: "Pure-Rust offline regf/hbin Registry hive key and value browser"
+  - name: hive.find
+    description: "Pure-Rust regf deep search by string, hex bytes, timestamp, or value type"
+  - name: hive.export
+    description: "Pure-Rust tolerant regf to .reg (REGEDIT4/5) exporter recovering malformed cells"
+  - name: hive.watch
+    description: "ETW Microsoft-Windows-Kernel-Registry ({70EB4F03-...}) monitor and .reg trace parser"
+
+  # -srum (4)
+  - name: srum.db
+    description: "Pure-Rust ESE (0x89ABCDEF) MSysObjects catalog and generic table browser"
+  - name: srum.net
+    description: "SRUM {973F5D5C-...} and SruDbIdMapTable per-app/user network usage view"
+  - name: srum.app
+    description: "SRUM {D10CA2FE-...} Application Resource Usage (CPU cycles, I/O, context switches) view"
+  - name: srum.energy
+    description: "SRUM {FEE4E14F-...} Energy and {DD6636C4-...} Network Connectivity view"
+
+  # -artifacts (14)
+  - name: artifacts.activity
+    description: "Cross-artifact forensic activity timeline correlating Prefetch, Registry, EVTX, Recent, and JumpLists"
+  - name: artifacts.prefetch
+    description: "Pure-Rust MAM\\x04 LZ77/XPRESS Huffman and SCCA v17/23/26/30 .pf Prefetch parser"
+  - name: artifacts.jumplists
+    description: "Pure-Rust OLE2/CFBF DestList and [MS-SHLLINK] LNK JumpList parser"
+  - name: artifacts.shellbags
+    description: "UsrClass.dat/NTUSER.DAT BagMRU SHITEMID PIDL folder access parser"
+  - name: artifacts.userassist
+    description: "UserAssist ROT13 decoder and 16/72-byte execution counter parser"
+  - name: artifacts.muicache
+    description: "MuiCache Registry application path and display name parser"
+  - name: artifacts.opensave
+    description: "OpenSavePidlMRU and LastVisitedPidlMRU file dialog PIDL decoder"
+  - name: artifacts.recent
+    description: "Pure-Rust [MS-SHLLINK] .lnk recent files and target metadata parser"
+  - name: artifacts.executed
+    description: "Aggregated execution evidence across UserAssist, Bam/Dam, ShimCache, Amcache, Prefetch, and MUICache"
+  - name: artifacts.usb_devices
+    description: "USBSTOR, USB, MountedDevices, and SetupAPI USB device inventory"
+  - name: artifacts.usb_log
+    description: "setupapi.dev.log offline parser and live PnP plug/unplug notification view"
+  - name: artifacts.vss
+    description: "Read-only WMI Win32_ShadowCopy/VSS enumeration and offline VSS catalog parser"
+  - name: artifacts.previous
+    description: "Read-only VSS shadow-volume file browser and safe copy-out restore view"
+  - name: artifacts.profiles
+    description: "ProfileList live and offline SOFTWARE hive user profile inventory"
+
+  # -crash (3)
+  - name: crash.bsod
+    description: "Pure-Rust MDMP kernel/BSOD minidump analyzer (SystemInfo, Exception, ModuleList)"
+  - name: crash.wer
+    description: "UTF-16LE / UTF-8 Report.wer Windows Error Reporting crash parser"
+  - name: crash.report
+    description: "User-mode MDMP and PE export / dbghelp crash report viewer (no DLL injection)"
+
+  # -posture (4)
+  - name: posture.updates
+    description: "Windows Update Agent COM (IUpdateSearcher) and offline DataStore.edb history view"
+  - name: posture.full_updates
+    description: "USOPrivate\\UpdateStore\\store.db, CBS.log, and DataStore.edb update history"
+  - name: posture.defender_status
+    description: "Windows Defender MSFT_MpComputerStatus/MSFT_MpPreference and Registry posture view"
+  - name: posture.security_center
+    description: "WMI root\\SecurityCenter2 AV/Firewall/AntiSpyware productState bitmask decoder"

@@ -1,0 +1,21 @@
+{
+  "name": "Forensics2Rust DFIR Suite",
+  "version": "0.1.0",
+  "description": "100% pure-Rust 45-tool read-only Windows DFIR suite (EVTX, Registry, SRUM, Artifacts, Crash, Posture) with Win32 (WinSafe) & Iced 0.14 GUIs, CLI, and read-only MCP server.",
+  "repository": "https://github.com/adpaolucci/forensics2rust",
+  "homepage": "https://forensics2rust.guap.ca",
+  "license": "Apache-2.0",
+  "binaries": [
+    "forensics2rust",
+    "forensics2rust-win32",
+    "forensics2rust-iced"
+  ],
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "45 read-only Windows DFIR tools across 6 domain crates",
+    "Pure-Rust offline binary parsers (EVTX, regf, ESE, MDMP, Prefetch, SHLLINK, CFBF)",
+    "Native Win32 (WinSafe) & Iced 0.14 dual desktop consoles",
+    "45-tool strictly read-only MCP JSON-RPC 2.0 stdio server",
+    "CSV/TSV/JSON/JSONL/HTML/Markdown exports with SHA-256/512 Merkle chain-of-custody"
+  ]
+}

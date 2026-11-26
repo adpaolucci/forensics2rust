@@ -1,0 +1,39 @@
+[package]
+name = "forensics2rust-iced"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Cross-platform Iced 0.14 data-grid DFIR desktop console (forensics2rust-iced)"
+
+[[bin]]
+name = "forensics2rust-iced"
+path = "src/main.rs"
+
+[dependencies]
+forensics2rust-core.workspace = true
+forensics2rust-evtx.workspace = true
+forensics2rust-hive.workspace = true
+forensics2rust-srum.workspace = true
+forensics2rust-crash.workspace = true
+forensics2rust-artifacts.workspace = true
+forensics2rust-posture.workspace = true
+forensics2rust-report.workspace = true
+guap-table.workspace = true
+guap-export.workspace = true
+guap-gui-iced.workspace = true
+anyhow.workspace = true
+arboard.workspace = true
+chrono.workspace = true
+clap.workspace = true
+dirs.workspace = true
+iced.workspace = true
+rfd.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true
