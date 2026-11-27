@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "100% pure-Rust 45-tool read-only Windows DFIR suite (EVTX, Registry, SRUM, Artifacts, Crash, Posture) with Win32 (WinSafe) & Iced 0.14 GUIs, CLI, and read-only MCP server.",
   "repository": "https://github.com/adpaolucci/forensics2rust",
-  "homepage": "https://forensics2rust.guap.ca",
+  "homepage": "https://guap.ca/forensics2rust/",
   "license": "Apache-2.0",
   "binaries": [
     "forensics2rust",
@@ -17,5 +17,233 @@
     "Native Win32 (WinSafe) & Iced 0.14 dual desktop consoles",
     "45-tool strictly read-only MCP JSON-RPC 2.0 stdio server",
     "CSV/TSV/JSON/JSONL/HTML/Markdown exports with SHA-256/512 Merkle chain-of-custody"
+  ],
+  "mcp_tools_count": 45,
+  "tools": [
+    {
+      "id": "artifacts.activity",
+      "readOnly": true,
+      "summary": "Cross-artifact forensic activity timeline correlating Prefetch, Registry, EVTX, Recent, and JumpLists"
+    },
+    {
+      "id": "artifacts.executed",
+      "readOnly": true,
+      "summary": "Aggregated execution evidence across UserAssist, Bam/Dam, ShimCache, Amcache, Prefetch, and MUICache"
+    },
+    {
+      "id": "artifacts.jumplists",
+      "readOnly": true,
+      "summary": "Pure-Rust OLE2/CFBF DestList and [MS-SHLLINK] LNK JumpList parser"
+    },
+    {
+      "id": "artifacts.muicache",
+      "readOnly": true,
+      "summary": "MuiCache Registry application path and display name parser"
+    },
+    {
+      "id": "artifacts.opensave",
+      "readOnly": true,
+      "summary": "OpenSavePidlMRU and LastVisitedPidlMRU file dialog PIDL decoder"
+    },
+    {
+      "id": "artifacts.prefetch",
+      "readOnly": true,
+      "summary": "Pure-Rust MAM\\x04 LZ77/XPRESS Huffman and SCCA v17/23/26/30 .pf Prefetch parser"
+    },
+    {
+      "id": "artifacts.previous",
+      "readOnly": true,
+      "summary": "Read-only VSS shadow-volume file browser and safe copy-out restore view"
+    },
+    {
+      "id": "artifacts.profiles",
+      "readOnly": true,
+      "summary": "ProfileList live and offline SOFTWARE hive user profile inventory"
+    },
+    {
+      "id": "artifacts.recent",
+      "readOnly": true,
+      "summary": "Pure-Rust [MS-SHLLINK] .lnk recent files and target metadata parser"
+    },
+    {
+      "id": "artifacts.shellbags",
+      "readOnly": true,
+      "summary": "UsrClass.dat/NTUSER.DAT BagMRU SHITEMID PIDL folder access parser"
+    },
+    {
+      "id": "artifacts.usb_devices",
+      "readOnly": true,
+      "summary": "USBSTOR, USB, MountedDevices, and SetupAPI USB device inventory"
+    },
+    {
+      "id": "artifacts.usb_log",
+      "readOnly": true,
+      "summary": "setupapi.dev.log offline parser and live PnP plug/unplug notification view"
+    },
+    {
+      "id": "artifacts.userassist",
+      "readOnly": true,
+      "summary": "UserAssist ROT13 decoder and 16/72-byte execution counter parser"
+    },
+    {
+      "id": "artifacts.vss",
+      "readOnly": true,
+      "summary": "Read-only WMI Win32_ShadowCopy/VSS enumeration and offline VSS catalog parser"
+    },
+    {
+      "id": "crash.bsod",
+      "readOnly": true,
+      "summary": "Pure-Rust MDMP kernel/BSOD minidump analyzer (SystemInfo, Exception, ModuleList)"
+    },
+    {
+      "id": "crash.report",
+      "readOnly": true,
+      "summary": "User-mode MDMP and PE export / dbghelp crash report viewer (no DLL injection)"
+    },
+    {
+      "id": "crash.wer",
+      "readOnly": true,
+      "summary": "UTF-16LE / UTF-8 Report.wer Windows Error Reporting crash parser"
+    },
+    {
+      "id": "evtx.all",
+      "readOnly": true,
+      "summary": "Full Windows Event Log viewer across .evtx files/directories and live channels"
+    },
+    {
+      "id": "evtx.channels",
+      "readOnly": true,
+      "summary": "EVTX channel configuration, file path, size, and enabled status viewer"
+    },
+    {
+      "id": "evtx.defender",
+      "readOnly": true,
+      "summary": "Windows Defender Operational (1006..1015, 1116..1119, 5001..5012) threat/scan log"
+    },
+    {
+      "id": "evtx.legacy",
+      "readOnly": true,
+      "summary": "Unified flat view across Application, System, and Security Event Logs"
+    },
+    {
+      "id": "evtx.logon",
+      "readOnly": true,
+      "summary": "Security Event Log (4624/4634/4647/4625) logon session correlator"
+    },
+    {
+      "id": "evtx.powershell",
+      "readOnly": true,
+      "summary": "PowerShell Operational (4103/4104) and classic (400/600) script audit view"
+    },
+    {
+      "id": "evtx.process",
+      "readOnly": true,
+      "summary": "Security EID 4688 and Sysmon EID 1 process creation EVTX view"
+    },
+    {
+      "id": "evtx.rdp",
+      "readOnly": true,
+      "summary": "TerminalServices LSM (21..25) and RCM (1149) RDP session history view"
+    },
+    {
+      "id": "evtx.sources",
+      "readOnly": true,
+      "summary": "Event Log publisher and provider DLL metadata viewer"
+    },
+    {
+      "id": "evtx.tasks",
+      "readOnly": true,
+      "summary": "Task Scheduler Operational (100..103, 106, 140, 200, 201) execution view"
+    },
+    {
+      "id": "evtx.timeline",
+      "readOnly": true,
+      "summary": "Cross-channel normalized Windows Event Log forensic timeline"
+    },
+    {
+      "id": "evtx.uptime",
+      "readOnly": true,
+      "summary": "System Event Log (6005/6006/6008/6009/1074/41/12/13) boot and shutdown analyzer"
+    },
+    {
+      "id": "evtx.usb",
+      "readOnly": true,
+      "summary": "Kernel-PnP (400..430) and DriverFrameworks (2003..2102) USB/PnP event view"
+    },
+    {
+      "id": "evtx.wifi",
+      "readOnly": true,
+      "summary": "WLAN-AutoConfig Operational (8001..8003, 11000..11010) Wi-Fi connection history"
+    },
+    {
+      "id": "hive.diff",
+      "readOnly": true,
+      "summary": "Registry comparison across snapshots, live hives, offline regf files, or VSS"
+    },
+    {
+      "id": "hive.export",
+      "readOnly": true,
+      "summary": "Pure-Rust tolerant regf to .reg (REGEDIT4/5) exporter recovering malformed cells"
+    },
+    {
+      "id": "hive.find",
+      "readOnly": true,
+      "summary": "Pure-Rust regf deep search by string, hex bytes, timestamp, or value type"
+    },
+    {
+      "id": "hive.offline",
+      "readOnly": true,
+      "summary": "Pure-Rust offline regf/hbin Registry hive key and value browser"
+    },
+    {
+      "id": "hive.scan",
+      "readOnly": true,
+      "summary": "Recursive Windows Registry scanner with type, date, length, and regex filters"
+    },
+    {
+      "id": "hive.watch",
+      "readOnly": true,
+      "summary": "ETW Microsoft-Windows-Kernel-Registry ({70EB4F03-...}) monitor and .reg trace parser"
+    },
+    {
+      "id": "posture.defender_status",
+      "readOnly": true,
+      "summary": "Windows Defender MSFT_MpComputerStatus/MSFT_MpPreference and Registry posture view"
+    },
+    {
+      "id": "posture.full_updates",
+      "readOnly": true,
+      "summary": "USOPrivate\\UpdateStore\\store.db, CBS.log, and DataStore.edb update history"
+    },
+    {
+      "id": "posture.security_center",
+      "readOnly": true,
+      "summary": "WMI root\\SecurityCenter2 AV/Firewall/AntiSpyware productState bitmask decoder"
+    },
+    {
+      "id": "posture.updates",
+      "readOnly": true,
+      "summary": "Windows Update Agent COM (IUpdateSearcher) and offline DataStore.edb history view"
+    },
+    {
+      "id": "srum.app",
+      "readOnly": true,
+      "summary": "SRUM {D10CA2FE-...} Application Resource Usage (CPU cycles, I/O, context switches) view"
+    },
+    {
+      "id": "srum.db",
+      "readOnly": true,
+      "summary": "Pure-Rust ESE (0x89ABCDEF) MSysObjects catalog and generic table browser"
+    },
+    {
+      "id": "srum.energy",
+      "readOnly": true,
+      "summary": "SRUM {FEE4E14F-...} Energy and {DD6636C4-...} Network Connectivity view"
+    },
+    {
+      "id": "srum.net",
+      "readOnly": true,
+      "summary": "SRUM {973F5D5C-...} and SruDbIdMapTable per-app/user network usage view"
+    }
   ]
 }
