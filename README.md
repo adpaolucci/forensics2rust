@@ -1,6 +1,6 @@
 # `forensics2rust` — 45-Tool Pure-Rust Read-Only Windows DFIR Suite
 
-Part of the **GUAP** Ecosystem (`guap.ca`) • [**Project Hub & Web Documentation: https://forensics2rust.guap.ca**](https://forensics2rust.guap.ca) • [**Project Wiki**](https://github.com/adpaolucci/forensics2rust/wiki)
+Part of the **GUAP** Ecosystem (`guap.ca`) • [**Project Hub & Web Documentation: https://guap.ca/forensics2rust/**](https://guap.ca/forensics2rust/) • [**Project Wiki**](https://github.com/adpaolucci/forensics2rust/wiki)
 
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](LICENSE)
 [![Rust: 2024](https://img.shields.io/badge/Rust-2024%20(1.88%2B)-orange.svg)](Cargo.toml)

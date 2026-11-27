@@ -7,7 +7,7 @@ Publisher: adpaolucci
 PublisherUrl: https://github.com/adpaolucci
 PublisherSupportUrl: https://github.com/adpaolucci/forensics2rust/issues
 PackageName: Forensics2Rust
-PackageUrl: https://forensics2rust.guap.ca
+PackageUrl: https://guap.ca/forensics2rust/
 License: Apache-2.0
 LicenseUrl: https://github.com/adpaolucci/forensics2rust/blob/main/LICENSE
 Copyright: Copyright (c) 2026 adpaolucci

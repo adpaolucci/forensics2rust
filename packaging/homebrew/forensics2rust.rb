@@ -1,6 +1,6 @@
 class Forensics2rust < Formula
   desc "Pure-Rust 45-tool read-only Windows DFIR suite, Iced GUI, CLI, and MCP server"
-  homepage "https://forensics2rust.guap.ca"
+  homepage "https://guap.ca/forensics2rust/"
   version "0.1.0"
   license "Apache-2.0"
 
