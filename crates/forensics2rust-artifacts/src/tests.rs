@@ -695,7 +695,7 @@ Contents of shadow copy set ID: {aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee}
     // Safe restore
     let out_dir = TempDir::new().unwrap();
     let restored =
-        restore_previous_file_into_dir(&snap_dir, Path::new("Users\\Alice\\secret_notes.txt"), out_dir.path()).unwrap();
+        restore_previous_file_into_dir(&snap_dir, Path::new("Users/Alice/secret_notes.txt"), out_dir.path()).unwrap();
     assert_eq!(fs::read(&restored).unwrap(), b"restored shadow content");
 
     let direct_dest = out_dir.path().join("direct_copy.txt");
@@ -704,11 +704,11 @@ Contents of shadow copy set ID: {aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee}
 
     // Traversal rejection
     assert!(matches!(
-        restore_previous_file(&sample_file, Path::new("..\\escape.txt")),
+        restore_previous_file(&sample_file, Path::new("../escape.txt")),
         Err(ForensicError::InvalidArgument(_))
     ));
     assert!(matches!(
-        restore_previous_file_into_dir(&snap_dir, Path::new("..\\..\\escape.txt"), out_dir.path()),
+        restore_previous_file_into_dir(&snap_dir, Path::new("../../escape.txt"), out_dir.path()),
         Err(ForensicError::InvalidArgument(_))
     ));
 }
