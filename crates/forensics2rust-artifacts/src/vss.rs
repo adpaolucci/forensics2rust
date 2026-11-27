@@ -433,6 +433,10 @@ fn check_no_symlink_components(path: &Path, allow_not_found: bool) -> Result<(),
             Component::Normal(_) => match fs::symlink_metadata(&prefix) {
                 Ok(m) => {
                     if m.file_type().is_symlink() {
+                        #[cfg(target_os = "macos")]
+                        if matches!(prefix.as_os_str().to_str(), Some("/var" | "/tmp" | "/etc")) {
+                            continue;
+                        }
                         return Err(ForensicError::InvalidArgument(format!(
                             "refusing symlink or junction path component: {}",
                             prefix.display()
