@@ -451,7 +451,11 @@ fn catalog_45_tools_invariants_and_r4() {
         assert_eq!(find_tool(desc.tool_id), Some(desc));
         assert_eq!(find_by_subcommand(desc.cli_subcommand), Some(desc));
 
-        assert!(!desc.display_name.trim().is_empty(), "empty display_name for {}", desc.tool_id);
+        assert!(
+            !desc.display_name.trim().is_empty(),
+            "empty display_name for {}",
+            desc.tool_id
+        );
         let haystacks = [
             desc.tool_id.to_ascii_lowercase(),
             desc.cli_subcommand.to_ascii_lowercase(),
