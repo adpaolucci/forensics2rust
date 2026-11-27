@@ -18,7 +18,7 @@ members = [
 [workspace.package]
 version = "0.1.0"
 edition = "2024"
-rust-version = "1.88"
+rust-version = "1.89"
 license = "Apache-2.0"
 repository = "https://github.com/adpaolucci/forensics2rust"
 homepage = "https://guap.ca/forensics2rust/"
@@ -59,7 +59,7 @@ regex = "1.13"
 sha2 = "0.11"
 walkdir = "2.5"
 tempfile = "3.27"
-rusqlite = { version = "0.34", features = ["bundled"] }
+rusqlite = { version = "0.43", features = ["bundled"] }
 csv = "1.4"
 dirs = "7.0"
 flate2 = "1.1"

@@ -1,4 +1,5 @@
 #![deny(unsafe_code)]
+#![cfg_attr(not(windows), allow(unused_imports, unused_mut))]
 
 //! Read-only Windows DFIR artifact parsers and 14 [`guap_table::TableProvider`]
 //! views (`artifacts.prefetch`, `artifacts.recent`, `artifacts.jumplists`, `artifacts.shellbags`,

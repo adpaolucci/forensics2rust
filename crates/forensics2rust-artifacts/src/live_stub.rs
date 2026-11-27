@@ -1,4 +1,5 @@
 #![forbid(unsafe_code)]
+#![allow(dead_code)]
 
 //! Non-Windows platform stubs for live-only OS collection helpers.
 
