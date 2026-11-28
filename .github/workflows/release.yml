@@ -15,11 +15,15 @@ on:
       draft:
         description: "Draft release"
         type: boolean
-        default: false
+        default: true
       prerelease:
         description: "Prerelease"
         type: boolean
         default: false
+      sandbox_review_id:
+        description: "Approved Plane 1 Windows Sandbox review run ID (from bun run factory sandbox-approve)"
+        required: false
+        default: ""
 
 permissions:
   contents: write
@@ -141,6 +145,7 @@ jobs:
     name: Publish GitHub Release
     needs: build
     runs-on: ubuntu-latest
+    environment: release-approval
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
@@ -173,12 +178,30 @@ jobs:
           fi
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
 
+      - name: Record Plane 1 Sandbox Review Gate
+        env:
+          TAG_NAME: ${{ steps.get_tag.outputs.tag }}
+          SANDBOX_REVIEW_ID: ${{ inputs.sandbox_review_id }}
+          DRAFT_STATUS: ${{ github.event_name == 'workflow_dispatch' && inputs.draft == false && 'false' || 'true' }}
+        run: |
+          REVIEW_ID="${SANDBOX_REVIEW_ID:-pending-draft-review}"
+          {
+            echo "## Plane 1 Sandbox Review Gate"
+            echo ""
+            echo "| Field | Value |"
+            echo "| --- | --- |"
+            echo "| Tag | \`${TAG_NAME}\` |"
+            echo "| Commit SHA | \`${{ github.sha }}\` |"
+            echo "| Sandbox review ID | \`${REVIEW_ID}\` |"
+            echo "| Draft | \`${DRAFT_STATUS}\` |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Create or Update GitHub Release
         uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ steps.get_tag.outputs.tag }}
           name: Forensics2Rust ${{ steps.get_tag.outputs.tag }}
-          draft: ${{ github.event.inputs.draft || false }}
+          draft: ${{ github.event_name == 'workflow_dispatch' && inputs.draft == false && 'false' || 'true' }}
           prerelease: ${{ github.event.inputs.prerelease || false }}
           files: |
             dist/*
